@@ -1,0 +1,131 @@
+@import "tailwindcss";
+
+@theme {
+  /* Named "night" — "base" would collide with the text-base font-size utility */
+  --color-night: #0a0a0f;
+  --color-surface: #12121a;
+  --color-accent: #8b5cf6;
+  --color-accent2: #22d3ee;
+}
+
+@theme inline {
+  --font-display: var(--font-space-grotesk), sans-serif;
+  --font-body: var(--font-inter), sans-serif;
+}
+
+html {
+  overflow-x: clip;
+  scrollbar-color: rgba(139, 92, 246, 0.5) #0a0a0f;
+}
+
+body {
+  background: var(--color-night);
+  color: #fff;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent2);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Lenis recommended styles */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      92deg,
+      var(--color-accent),
+      var(--color-accent2)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* background-clip: text doesn't reach through the reveal masks, so each
+     split word carries its own gradient */
+  .text-gradient .reveal-inner {
+    background: linear-gradient(
+      92deg,
+      var(--color-accent),
+      var(--color-accent2)
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+}
+
+/* Masked word/char reveal (animated by GSAP) */
+.reveal {
+  display: inline-block;
+}
+.reveal .reveal-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.reveal .reveal-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Hero scroll hint */
+@keyframes scroll-dot {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(26px);
+    opacity: 0;
+  }
+}
+.scroll-hint-dot {
+  animation: scroll-dot 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-hint-dot {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+  /* Without the pinned scroll animation the project row must scroll natively */
+  .projects-viewport {
+    overflow-x: auto;
+  }
+}
