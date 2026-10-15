@@ -1,9 +1,9 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/config/site";
 
+export const alt = `${site.name} — ${site.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
-export const alt = `${site.name} — ${site.role}`;
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -16,28 +16,59 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: "80px",
-          backgroundColor: "#0a0a0f",
+          background: "#f5f3ec",
           backgroundImage:
-            "radial-gradient(circle at 85% 15%, rgba(139,92,246,0.35), transparent 50%), radial-gradient(circle at 10% 90%, rgba(34,211,238,0.25), transparent 50%)",
-          color: "#ffffff",
-          fontFamily: "sans-serif",
+            "repeating-linear-gradient(to bottom, transparent 0, transparent 47px, rgba(120,145,180,0.3) 47px, rgba(120,145,180,0.3) 48px)",
         }}
       >
         <div
           style={{
-            fontSize: 28,
-            letterSpacing: 6,
-            color: "#8b5cf6",
-            textTransform: "uppercase",
+            display: "flex",
+            fontSize: 26,
+            fontFamily: "monospace",
+            letterSpacing: 4,
+            color: "#4b483c",
           }}
         >
-          Portfolio
+          {site.role.toUpperCase()}
         </div>
-        <div style={{ fontSize: 110, fontWeight: 700, marginTop: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            marginTop: 18,
+            fontSize: 132,
+            fontWeight: 900,
+            color: "#16150f",
+            letterSpacing: -4,
+          }}
+        >
           {site.name}
         </div>
-        <div style={{ fontSize: 40, color: "rgba(255,255,255,0.75)" }}>
-          {site.role}
+        <div
+          style={{
+            display: "flex",
+            marginTop: 28,
+            fontSize: 36,
+            color: "#16150f",
+            maxWidth: 900,
+            lineHeight: 1.3,
+          }}
+        >
+          {site.tagline}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            marginTop: 44,
+            padding: "14px 28px",
+            background: "#ffd23f",
+            border: "3px solid #16150f",
+            fontSize: 26,
+            fontFamily: "monospace",
+            alignSelf: "flex-start",
+          }}
+        >
+          {site.url.replace("https://", "")}
         </div>
       </div>
     ),
