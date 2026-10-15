@@ -179,7 +179,7 @@ export const projects: Project[] = [
         heading: "Booking a real slot is a promise you can't keep.",
         body: [
           "The obvious build is a calendar: show the doctor's free slots, let the patient take one, send a confirmation. It demos beautifully and breaks on contact with how clinics actually run — a consultant overruns, an emergency lands, the receptionist moves three people, and now the website has told four patients something that isn't true.",
-          "So DocMate books an appointment *request*. The patient picks a doctor and a preferred window, a coordinator calls back and confirms the real time. The site never makes a promise the clinic hasn't agreed to.",
+          "So DocMate books an appointment request, not a booking. The patient picks a doctor and a preferred window, a coordinator calls back and confirms the real time. The site never makes a promise the clinic hasn't agreed to.",
         ],
       },
       {
