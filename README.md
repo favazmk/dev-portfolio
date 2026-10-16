@@ -71,9 +71,21 @@ in the display face, which is a legitimate lockup here rather than a hole.
 
 To add one: reduce it to white-on-transparent, trim the bounding box, cap the
 long edge around 900px, drop it in `public/logos/`, and point a `clients` entry
-at it. Marks that knock their letterforms out of a solid badge (and so can't
-become a flat silhouette) keep the badge as the white shape with the letters
-punched back out.
+at it.
+
+Two shapes of mark need more than a straight alpha copy:
+
+- **Letters knocked out of a solid badge** (The Leather Doctor, Zawaya) can't
+  become a flat silhouette, so the badge stays the white shape and the letters
+  are punched back out of it.
+- **Two-colour marks whose colours carry the letterform separation** (Sam
+  Fitness: a white *S* flush against a red *F*) fuse into one blob when
+  flattened. There the colour boundary is converted into a 2px physical gap, so
+  the separation survives the loss of colour.
+
+A mark supplied only on a solid card (Imperial Star) is usually also published
+on transparent somewhere in the same repo — prefer that file over keying the
+card away.
 
 ## Customizing the look
 

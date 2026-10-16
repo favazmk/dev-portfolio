@@ -140,7 +140,7 @@ export const site = {
 
   stats: [
     { value: "30+", label: "Repositories shipped" },
-    { value: "27", label: "Brands worked with" },
+    { value: "31", label: "Brands worked with" },
     { value: "200+", label: "Scripts written" },
     { value: "3+", label: "Years writing" },
   ],
@@ -193,6 +193,10 @@ export const clients: Client[] = [
   { name: "Gala IT Care", logo: "/logos/gala.svg", work: "build" },
   { name: "Shaista Fathima", logo: "/logos/shaista.svg", work: "build" },
   { name: "Hashir Nisam", logo: "/logos/hashir-nisam.svg", work: "build" },
+  { name: "DocMate", logo: "/logos/docmate.png", work: "build" },
+  { name: "Zevaa", logo: "/logos/zevaa.svg", work: "build" },
+  { name: "Imperial Star Events", logo: "/logos/imperial-star.png", work: "build" },
+  { name: "Sam Fitness", logo: "/logos/sam-fitness.png", work: "build" },
 
   { name: "Cedar Cosmetics", logo: "/logos/agency/cedar-cosmetics.png", work: "brand" },
   { name: "Vogue Venue", logo: "/logos/agency/vogue-venue.png", work: "brand" },
@@ -218,7 +222,7 @@ export const projects: Project[] = [
   /* ===================== SYSTEMS ===================== */
   {
     slug: "docmate",
-    logo: "",
+    logo: "/logos/docmate.png",
     repo: "docmate-app",
     track: "systems",
     title: "DocMate",
@@ -277,7 +281,7 @@ export const projects: Project[] = [
   },
   {
     slug: "zevaa-commerce",
-    logo: "",
+    logo: "/logos/zevaa.svg",
     repo: "zevaa-ecommerce",
     track: "systems",
     title: "Zevaa Commerce Engine",
@@ -329,7 +333,7 @@ export const projects: Project[] = [
   },
   {
     slug: "imperial-star",
-    logo: "",
+    logo: "/logos/imperial-star.png",
     repo: "imperial-star-events",
     track: "systems",
     title: "Imperial Star Events",
@@ -862,6 +866,7 @@ export const archiveRepos: ArchiveEntry[] = [
     note: "Dubai gym site with a scroll-scrubbed hero frame sequence.",
     live: "https://sam-fitness-delta.vercel.app",
     language: "JavaScript",
+    logo: "/logos/sam-fitness.png",
   },
   {
     repo: "Micemedia",
