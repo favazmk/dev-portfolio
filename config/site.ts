@@ -3,15 +3,6 @@
  * The only file you need to edit to change copy, add work, or reorder things.
  * ========================================================================= */
 
-export type Tone =
-  | "marker"
-  | "sky"
-  | "grass"
-  | "bubble"
-  | "tangerine"
-  | "lilac"
-  | "paper";
-
 /** Which half of the portfolio a project belongs to. */
 export type Track = "systems" | "craft";
 
@@ -23,7 +14,7 @@ export interface Fact {
 export interface CaseSection {
   heading: string;
   body: string[];
-  /** Rendered as a blueprint panel beside the prose */
+  /** Rendered as a spec panel beside the prose */
   points?: string[];
 }
 
@@ -34,6 +25,8 @@ export interface Project {
   track: Track;
   title: string;
   client: string;
+  /** Client's own mark, under /public/logos. "" falls back to a wordmark. */
+  logo: string;
   /** One line on the card */
   summary: string;
   /** Standfirst at the top of the case study */
@@ -41,7 +34,6 @@ export interface Project {
   date: string;
   /** "" hides the live link */
   live: string;
-  tone: Tone;
   /** Path under /public. Empty renders a generated typographic panel. */
   image: string;
   tags: string[];
@@ -55,19 +47,22 @@ export interface Project {
 
 export const site = {
   name: "Favaz MK",
-  firstName: "FAVAZ",
+  fullName: "Muhammed Favaz MK",
   initials: "FMK",
   role: "Full-Stack Web Developer",
-  location: "Kerala, India",
-  availability: "Open to new work and good problems",
+  secondRole: "Content Writer & Digital Strategist",
+  location: "Kochi, Kerala, India",
+  availability: "Open for work",
+  year: "2026",
 
   tagline:
-    "I build web products that handle money, data and real customers — and look good doing it.",
+    "I build web products that handle money, data and real customers — and write the words that sell them.",
 
-  /** The big two-line hero statement */
-  statement: ["I build software that", "gets out of your way."],
+  /** The big hero statement, set one line per array entry */
+  statement: ["Systems", "that ship."],
 
   email: "favazmk12@gmail.com",
+  phone: "+91 90619 26060",
   github: "favazmk",
 
   /** Set this to the production domain after deploying */
@@ -75,74 +70,144 @@ export const site = {
 
   socials: {
     github: "https://github.com/favazmk",
-    /** Fill these in and the links appear automatically */
+    instagram: "https://www.instagram.com/fa_was.mk",
     linkedin: "",
     x: "",
-    instagram: "",
   },
 
-  heroTags: [
-    { text: "SHIPS REAL PRODUCTS", tone: "grass" as Tone },
-    { text: "SWEATS THE DETAILS", tone: "marker" as Tone },
+  /** Numbered contents list, mirroring the section ids on the page */
+  index: [
+    { n: "01", label: "Profile", href: "#profile" },
+    { n: "02", label: "Clients", href: "#clients" },
+    { n: "03", label: "Platforms & Systems", href: "#systems" },
+    { n: "04", label: "Brand & Marketing Sites", href: "#craft" },
+    { n: "05", label: "Content & Strategy", href: "#content" },
+    { n: "06", label: "Archive", href: "#archive" },
+    { n: "07", label: "Contact", href: "#contact" },
   ],
 
-  /** The handwritten "what's up" note */
-  note: [
-    "I'm a full-stack developer who gets a little too excited about making complicated things feel simple.",
-    "Half my work is plumbing — payments, databases, admin panels, the stuff that has to be right or someone loses money. The other half is making a page feel like somewhere you want to be.",
-    "Most of it is live client work that had to ship, not demos.",
+  intro: [
+    "I'm a full-stack developer and content strategist working with businesses across the UAE and India — clinics, freight, events, cafés, retail.",
+    "Half my work is plumbing: payments, databases, admin panels, the parts that have to be right or someone loses money. The other half is making a page feel like somewhere worth staying.",
+    "Before the code, I spent three years writing — 200+ scripts and ad copy for international brands. That side never stopped; it just moved upstream of the build.",
   ],
 
-  bio: "Full-stack developer building for businesses across the UAE and India — clinics, freight, events, cafes, retail. I take projects from an empty repo to a live product: schema, payments, admin tooling, and the front end people actually see.",
+  bio:
+    "Full-stack developer building for businesses across the UAE and India. I take projects from an empty repo to a live product: schema, payments, admin tooling, and the front end people actually see.",
 
-  /** Two-track framing used on the work section */
+  /** The two halves of the build practice */
   tracks: {
     systems: {
-      label: "SYSTEMS",
-      title: "THINGS THAT RUN",
+      label: "Platforms & Systems",
       note: "Payments, databases, admin panels, live tracking. Work where being wrong has consequences.",
     },
     craft: {
-      label: "CRAFT",
-      title: "THINGS THAT LAND",
-      note: "Brand sites where the job is to make someone feel something in the first three seconds.",
+      label: "Brand & Marketing Sites",
+      note: "Sites whose job is to make someone feel something in the first three seconds — then get out of the way.",
     },
   },
 
+  disciplines: [
+    {
+      n: "01",
+      title: "Engineering",
+      note: "Next.js, TypeScript and SQL against real payment rails and production data.",
+      points: [
+        "Payments — Stripe, Razorpay, webhook-verified fulfilment",
+        "Data — MySQL, Prisma, Firestore, Supabase",
+        "Admin tooling built for non-technical staff",
+        "Static exports that deploy anywhere",
+      ],
+    },
+    {
+      n: "02",
+      title: "Content & Strategy",
+      note: "Three years writing scripts, ad copy and positioning for creators and international brands.",
+      points: [
+        "200+ long-form video scripts written",
+        "Ad copy for 16 international brands",
+        "Content planning and brand positioning",
+        "Thumbnails, posters and short-form editing",
+      ],
+    },
+  ],
+
   skills: [
-    { name: "TypeScript", tone: "sky" as Tone },
-    { name: "Next.js", tone: "marker" as Tone },
-    { name: "React", tone: "grass" as Tone },
-    { name: "Node & Express", tone: "bubble" as Tone },
-    { name: "Prisma / SQL", tone: "lilac" as Tone },
-    { name: "Stripe & Razorpay", tone: "tangerine" as Tone },
-    { name: "Firebase", tone: "sky" as Tone },
-    { name: "GSAP", tone: "grass" as Tone },
-    { name: "Astro", tone: "marker" as Tone },
-    { name: "Tailwind CSS", tone: "bubble" as Tone },
+    "TypeScript", "Next.js", "React", "Node & Express", "Prisma / SQL",
+    "Stripe & Razorpay", "Firebase", "GSAP", "Astro", "Tailwind CSS",
+    "Copywriting", "Content Strategy",
   ],
 
   stats: [
-    { value: "22", label: "Repos shipped" },
-    { value: "15", label: "Live deployments" },
-    { value: "7", label: "Industries" },
+    { value: "30+", label: "Repositories shipped" },
+    { value: "27", label: "Brands worked with" },
+    { value: "200+", label: "Scripts written" },
+    { value: "3+", label: "Years writing" },
   ],
 
-  clients: [
-    "DocMate",
-    "Pandur",
-    "MENAARC",
-    "Safeway",
-    "Rashid Ali",
-    "Flyzone",
-    "Imperial Star",
-  ],
+  /** The content-writing practice, carried over from the earlier portfolio */
+  content: {
+    standfirst:
+      "Before the code there were three years of words — scripts for creators, ad copy for international brands, and the strategy underneath both.",
+    body: [
+      "I've written over 200 scripts and built ad copy and content strategies for brands across the Gulf and India, shaping how creators say what they mean.",
+      "It's the same instinct as the engineering work: find the thing that actually matters, cut everything else, and make what's left impossible to misread.",
+    ],
+    services: [
+      { n: "01", title: "Strategic content planning", note: "Clear, consistent plans that keep creators and brands shipping." },
+      { n: "02", title: "Brand & creator growth", note: "Building identity, improving reach, growing without gimmicks." },
+      { n: "03", title: "Graphic design", note: "Modern graphics and thumbnails that earn the click honestly." },
+      { n: "04", title: "Video editing & production", note: "Short-form cuts built for how people actually watch." },
+    ],
+  },
 
   contact: {
-    heading: "LET'S TALK",
-    note: "Got a project, a hard problem, or just want to say hi? Send it over. I read every message.",
+    heading: "Let's talk",
+    note: "Got a project, a hard problem, or just want to say hi? Send it over — I read every message.",
   },
 } as const;
+
+/* ---------------------------------------------------------------------------
+ * CLIENTS
+ * Marks are normalised to white silhouettes so a mixed set reads as one wall.
+ * `work` distinguishes brands I built for from brands I wrote for.
+ * ------------------------------------------------------------------------ */
+export interface Client {
+  name: string;
+  logo: string;
+  work: "build" | "brand";
+}
+
+export const clients: Client[] = [
+  { name: "Pandur", logo: "/logos/pandur.svg", work: "build" },
+  { name: "MENAARC", logo: "/logos/menaarc.svg", work: "build" },
+  { name: "Safeway Switchgears", logo: "/logos/safeway.png", work: "build" },
+  { name: "Flyzone Freight", logo: "/logos/flyzone.svg", work: "build" },
+  { name: "Netex Freight", logo: "/logos/netex.png", work: "build" },
+  { name: "Rashid Ali Hassan Cafeteria", logo: "/logos/rashid-ali.png", work: "build" },
+  { name: "Mice Media", logo: "/logos/micemedia.png", work: "build" },
+  { name: "Bandhan Contracting", logo: "/logos/bandhan.png", work: "build" },
+  { name: "Today's Fit Gym", logo: "/logos/todaysfit.png", work: "build" },
+  { name: "The Web Branding", logo: "/logos/web-branding.png", work: "build" },
+  { name: "Attention Reset", logo: "/logos/attention-reset.svg", work: "build" },
+  { name: "Gala IT Care", logo: "/logos/gala.svg", work: "build" },
+  { name: "Shaista Fathima", logo: "/logos/shaista.svg", work: "build" },
+  { name: "Hashir Nisam", logo: "/logos/hashir-nisam.svg", work: "build" },
+
+  { name: "Cedar Cosmetics", logo: "/logos/agency/cedar-cosmetics.png", work: "brand" },
+  { name: "Vogue Venue", logo: "/logos/agency/vogue-venue.png", work: "brand" },
+  { name: "Silvan Global", logo: "/logos/agency/silvan-global.png", work: "brand" },
+  { name: "Ray Sports UAE", logo: "/logos/agency/ray-sports.png", work: "brand" },
+  { name: "The Specs Store", logo: "/logos/agency/the-specs-store.png", work: "brand" },
+  { name: "Brod", logo: "/logos/agency/brod.png", work: "brand" },
+  { name: "Indus Jewellers", logo: "/logos/agency/indus-jewellers.png", work: "brand" },
+  { name: "Magic Mirror Beauty Salon", logo: "/logos/agency/magic-mirror.png", work: "brand" },
+  { name: "The Leather Doctor", logo: "/logos/agency/leather-doctor.png", work: "brand" },
+  { name: "Desert Fresh Market", logo: "/logos/agency/desert-fresh.png", work: "brand" },
+  { name: "Extragram Jewels", logo: "/logos/agency/extragram-jewels.png", work: "brand" },
+  { name: "Diora Jewellery", logo: "/logos/agency/diora-jewellery.png", work: "brand" },
+  { name: "Zawaya", logo: "/logos/agency/zawaya.png", work: "brand" },
+];
 
 /* ---------------------------------------------------------------------------
  * PROJECTS
@@ -153,6 +218,7 @@ export const projects: Project[] = [
   /* ===================== SYSTEMS ===================== */
   {
     slug: "docmate",
+    logo: "",
     repo: "docmate-app",
     track: "systems",
     title: "DocMate",
@@ -163,7 +229,6 @@ export const projects: Project[] = [
       "Patients search for specialists across three emirates and request an appointment. A coordinator calls back to confirm. The platform books requests, not slots — and that one decision shaped the whole system.",
     date: "OCT 2026",
     live: "https://docmate.ae",
-    tone: "sky",
     image: "/work/docmate.webp",
     tags: ["Full-stack", "Healthcare"],
     language: "TypeScript",
@@ -212,6 +277,7 @@ export const projects: Project[] = [
   },
   {
     slug: "zevaa-commerce",
+    logo: "",
     repo: "zevaa-ecommerce",
     track: "systems",
     title: "Zevaa Commerce Engine",
@@ -222,7 +288,6 @@ export const projects: Project[] = [
       "Every agency ends up with six nearly identical e-commerce codebases and no way to fix a bug once. This is the attempt to not do that.",
     date: "OCT 2026",
     live: "",
-    tone: "lilac",
     image: "/work/zevaa.webp",
     tags: ["Architecture", "E-commerce"],
     language: "TypeScript",
@@ -264,6 +329,7 @@ export const projects: Project[] = [
   },
   {
     slug: "imperial-star",
+    logo: "",
     repo: "imperial-star-events",
     track: "systems",
     title: "Imperial Star Events",
@@ -274,7 +340,6 @@ export const projects: Project[] = [
       "Taking money is easy. Taking money reliably — so every paid ticket exists and no unpaid one does — is the whole job.",
     date: "OCT 2026",
     live: "https://imperial-star-events.vercel.app",
-    tone: "tangerine",
     image: "/work/imperial-star.webp",
     tags: ["Payments", "Ticketing"],
     language: "TypeScript",
@@ -309,6 +374,7 @@ export const projects: Project[] = [
   },
   {
     slug: "attention-reset",
+    logo: "/logos/attention-reset.svg",
     repo: "Attention-Reset",
     track: "systems",
     title: "Attention Reset",
@@ -319,7 +385,6 @@ export const projects: Project[] = [
       "A product that sells directly to consumers lives or dies on whether its ad tracking tells the truth. Most implementations quietly lie.",
     date: "SEP 2026",
     live: "https://attention-reset.vercel.app",
-    tone: "bubble",
     image: "/work/attention-reset.png",
     tags: ["Payments", "Analytics"],
     language: "JavaScript",
@@ -360,6 +425,7 @@ export const projects: Project[] = [
   },
   {
     slug: "netex-freight",
+    logo: "/logos/netex.png",
     repo: "Netex-Freight",
     track: "systems",
     title: "Netex Freight",
@@ -370,7 +436,6 @@ export const projects: Project[] = [
       "A freight customer has exactly one question: where is my container. Everything else on the site is secondary to answering it.",
     date: "AUG 2026",
     live: "https://favazmk.github.io/Netex-Freight/",
-    tone: "grass",
     image: "/work/netex.webp",
     tags: ["Real-time", "Logistics"],
     language: "JavaScript",
@@ -405,6 +470,7 @@ export const projects: Project[] = [
   },
   {
     slug: "review-collector",
+    logo: "/logos/web-branding.png",
     repo: "review-collector",
     track: "systems",
     title: "Review Collector",
@@ -415,7 +481,6 @@ export const projects: Project[] = [
       "The feature everyone asks for — 'just post the review to Google for them' — is impossible. This is the honest version of it.",
     date: "AUG 2026",
     live: "https://review-collector-eosin.vercel.app",
-    tone: "marker",
     image: "",
     tags: ["Product", "Node"],
     language: "JavaScript",
@@ -451,6 +516,7 @@ export const projects: Project[] = [
   },
   {
     slug: "catalogue-generator",
+    logo: "",
     repo: "catalogue-generator",
     track: "systems",
     title: "Catalogue Generator",
@@ -461,7 +527,6 @@ export const projects: Project[] = [
       "A sales team was rebuilding the same PDF catalogue by hand in a design tool every time a price changed.",
     date: "JUN 2026",
     live: "https://catalogue-generator-a.vercel.app",
-    tone: "sky",
     image: "",
     tags: ["Tooling", "PDF"],
     language: "TypeScript",
@@ -498,6 +563,7 @@ export const projects: Project[] = [
   /* ===================== CRAFT ===================== */
   {
     slug: "pandur",
+    logo: "/logos/pandur.svg",
     repo: "pandur-website",
     track: "craft",
     title: "Pandur",
@@ -508,7 +574,6 @@ export const projects: Project[] = [
       "A 45-year-old bakery with international ambitions and a brand that had never been told properly online.",
     date: "SEP 2026",
     live: "https://pandur-website.vercel.app",
-    tone: "tangerine",
     image: "/work/pandur.webp",
     tags: ["Brand site", "Editorial"],
     language: "TypeScript",
@@ -549,6 +614,7 @@ export const projects: Project[] = [
   },
   {
     slug: "menaarc",
+    logo: "/logos/menaarc.svg",
     repo: "menaarc",
     track: "craft",
     title: "MENAARC",
@@ -559,7 +625,6 @@ export const projects: Project[] = [
       "Architects are judged on their drawings. The site's only job is to present them at a size where the detail survives.",
     date: "OCT 2026",
     live: "https://menaarc-ten.vercel.app",
-    tone: "sky",
     image: "/work/menaarc.webp",
     tags: ["Corporate", "Editorial"],
     language: "TypeScript",
@@ -593,6 +658,7 @@ export const projects: Project[] = [
   },
   {
     slug: "rashid-ali-cafe",
+    logo: "/logos/rashid-ali.png",
     repo: "rashidali-cafe",
     track: "craft",
     title: "Rashid Ali Cafeteria",
@@ -603,7 +669,6 @@ export const projects: Project[] = [
       "Thirty-five branches, a full menu, and a WordPress install carrying years of plugin weight.",
     date: "OCT 2026",
     live: "https://rashidali-cafe.vercel.app",
-    tone: "marker",
     image: "/work/rashidali.jpg",
     tags: ["Rebuild", "Multi-location"],
     language: "Astro",
@@ -638,6 +703,7 @@ export const projects: Project[] = [
   },
   {
     slug: "safeway-switchgears",
+    logo: "/logos/safeway.png",
     repo: "safeway-switchgears",
     track: "craft",
     title: "Safeway Switchgears",
@@ -648,7 +714,6 @@ export const projects: Project[] = [
       "B2B buyers arrive with a part number and a deadline. Everything between them and an answer is friction.",
     date: "OCT 2026",
     live: "https://safeway-switchgears.vercel.app",
-    tone: "marker",
     image: "/work/safeway.jpg",
     tags: ["Corporate", "Static"],
     language: "TypeScript",
@@ -683,6 +748,7 @@ export const projects: Project[] = [
   },
   {
     slug: "flyzone-freight",
+    logo: "/logos/flyzone.svg",
     repo: "flyzone-freights",
     track: "craft",
     title: "Flyzone Freight",
@@ -693,7 +759,6 @@ export const projects: Project[] = [
       "Logistics sites all look the same because they all use the same stock container photo. This one animates the journey instead.",
     date: "OCT 2026",
     live: "https://flyzone-freights.vercel.app",
-    tone: "sky",
     image: "/work/flyzone.jpg",
     tags: ["Marketing site", "Motion"],
     language: "JavaScript",
@@ -728,6 +793,7 @@ export const projects: Project[] = [
   },
   {
     slug: "web-branding",
+    logo: "/logos/web-branding.png",
     repo: "Web-Branding",
     track: "craft",
     title: "The Web Branding",
@@ -738,7 +804,6 @@ export const projects: Project[] = [
       "An agency site has a harder brief than its clients' sites: it is the proof.",
     date: "OCT 2026",
     live: "https://web-branding-three.vercel.app",
-    tone: "bubble",
     image: "/work/web-branding.webp",
     tags: ["Agency", "Brand"],
     language: "HTML",
@@ -764,96 +829,111 @@ export const projects: Project[] = [
         ],
       },
     ],
-  },
-];
+  },];
 
 /* ---------------------------------------------------------------------------
- * ARCHIVE — the "more work" grid. The curated note and live URL here are
+ * ARCHIVE — the "more work" table. The curated note and live URL here are
  * always rendered; language and star counts are merged in from the GitHub API
  * at build time when it is reachable.
  * ------------------------------------------------------------------------ */
 export interface ArchiveEntry {
   repo: string;
+  /** Display name — the repo name is often not the brand name. */
+  title: string;
   note: string;
   live: string;
   language: string;
-  /** Optional thumbnail under /public. Cards without one stay text-only. */
-  image?: string;
+  /** Client's own mark, under /public/logos. "" renders the title alone. */
+  logo?: string;
 }
 
 export const archiveRepos: ArchiveEntry[] = [
   {
     repo: "todaysfit-gym",
+    title: "Today's Fit Gym",
     note: "Five-page commercial site for a Bur Dubai gym.",
     live: "https://todaysfitgym.vercel.app",
     language: "HTML",
+    logo: "/logos/todaysfit.png",
   },
   {
     repo: "sam-fitness",
+    title: "Sam Fitness",
     note: "Dubai gym site with a scroll-scrubbed hero frame sequence.",
     live: "https://sam-fitness-delta.vercel.app",
     language: "JavaScript",
-    image: "/work/sam-fitness.webp",
   },
   {
     repo: "Micemedia",
+    title: "Mice Media",
     note: "Event-management platform — bookings, showcases, services.",
     live: "https://mice-media.vercel.app",
     language: "TypeScript",
-    image: "/work/micemedia.webp",
+    logo: "/logos/micemedia.png",
   },
   {
     repo: "e-commerce-template",
-    note: "Agency storefront template the commerce engine grew out of.",
+    title: "Agency Storefront",
+    note: "Storefront template the commerce engine grew out of.",
     live: "https://agency-ecommerce.vercel.app",
     language: "TypeScript",
   },
   {
     repo: "Shaista-Real-estate-portfolio-",
+    title: "Shaista Fathima",
     note: "Personal portfolio for a real-estate consultant.",
     live: "https://shaista-portfolio-gold.vercel.app",
     language: "JavaScript",
-    image: "/work/shaista.webp",
+    logo: "/logos/shaista.svg",
   },
   {
     repo: "hashir-nisam-portfolio",
+    title: "Hashir Nisam",
     note: "Personal site for a Dubai marketing consultant.",
     live: "",
     language: "TypeScript",
+    logo: "/logos/hashir-nisam.svg",
   },
   {
     repo: "gala-it-care",
+    title: "Gala IT Care",
     note: "Marketing site for an IT services company.",
     live: "https://gala-it-care.vercel.app",
     language: "HTML",
+    logo: "/logos/gala.svg",
   },
   {
     repo: "Bandhan",
-    note: "Client site built end to end and deployed.",
+    title: "Bandhan Contracting",
+    note: "Contracting brand site, built end to end and deployed.",
     live: "https://bandhan-psi.vercel.app",
     language: "HTML",
-    image: "/work/bandhan.webp",
+    logo: "/logos/bandhan.png",
   },
   {
     repo: "Mujeeb-Perfumes",
+    title: "Mujeeb Perfumes",
     note: "Brand site for a perfume retailer.",
     live: "",
     language: "TypeScript",
   },
   {
     repo: "openwear",
+    title: "OpenWear",
     note: "Wearable telemetry hub unifying Apple Health, Google Fit, Strava, Garmin and BLE.",
     live: "",
     language: "JavaScript",
   },
   {
     repo: "core-habit-lab",
+    title: "Core Habit Lab",
     note: "Habit-tracking experiment.",
     live: "",
     language: "TypeScript",
   },
   {
     repo: "WB-Clients-List",
+    title: "WB Clients List",
     note: "Internal client-tracking tool in Python.",
     live: "https://wb-clients-list.vercel.app",
     language: "Python",
@@ -862,7 +942,12 @@ export const archiveRepos: ArchiveEntry[] = [
 
 export const systemsProjects = projects.filter((p) => p.track === "systems");
 export const craftProjects = projects.filter((p) => p.track === "craft");
+export const buildClients = clients.filter((c) => c.work === "build");
+export const brandClients = clients.filter((c) => c.work === "brand");
 
 export function projectBySlug(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug);
 }
+
+/** Case studies in page order, so a study can link to the next one. */
+export const orderedProjects = [...systemsProjects, ...craftProjects];

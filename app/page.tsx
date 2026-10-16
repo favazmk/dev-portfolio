@@ -1,9 +1,11 @@
 import { getArchive } from "@/lib/github";
-import Paper from "@/components/ui/Paper";
 import Nav from "@/components/Nav";
 import Hero from "@/components/sections/Hero";
-import About from "@/components/sections/About";
+import Index from "@/components/sections/Index";
+import Profile from "@/components/sections/Profile";
+import Clients from "@/components/sections/Clients";
 import Work from "@/components/sections/Work";
+import Content from "@/components/sections/Content";
 import Archive from "@/components/sections/Archive";
 import Contact from "@/components/sections/Contact";
 
@@ -13,15 +15,18 @@ export default async function Page() {
   const archive = await getArchive();
 
   return (
-    <Paper>
+    <>
       <Nav />
       <main id="content">
         <Hero />
-        <About />
+        <Index />
+        <Profile />
+        <Clients />
         <Work />
+        <Content />
         <Archive items={archive} />
         <Contact />
       </main>
-    </Paper>
+    </>
   );
 }

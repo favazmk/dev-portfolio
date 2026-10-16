@@ -1,27 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Rubik_Mono_One, Caveat, Space_Mono, Inter } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { site } from "@/config/site";
 import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
-/* Blocky poster display — the big ROBIN-style headlines */
-const display = Rubik_Mono_One({
-  weight: "400",
+/* Display — headlines and the big statement type */
+const display = Geist({
   subsets: ["latin"],
   variable: "--font-display-face",
   display: "swap",
 });
 
-/* Marker handwriting — annotations and the "what's up" note */
-const hand = Caveat({
-  subsets: ["latin"],
-  variable: "--font-hand-face",
-  display: "swap",
-});
-
-/* Tiny uppercase labels — nav, tabs, "VIEW PROJECT" */
-const mono = Space_Mono({
-  weight: ["400", "700"],
+/* Labels, numerals and anything set in caps */
+const mono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono-face",
   display: "swap",
@@ -44,12 +35,14 @@ export const metadata: Metadata = {
   keywords: [
     site.name,
     "web developer",
-    "front-end developer",
+    "full-stack developer",
     "Next.js developer",
     "React developer",
+    "content writer",
     "portfolio",
     "Dubai",
     "UAE",
+    "Kerala",
   ],
   authors: [{ name: site.name, url: site.url }],
   creator: site.name,
@@ -71,7 +64,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f5f3ec",
+  themeColor: "#0e0e0e",
   width: "device-width",
   initialScale: 1,
 };
@@ -79,13 +72,15 @@ export const viewport: Viewport = {
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
-  name: site.name,
+  name: site.fullName,
+  alternateName: site.name,
   jobTitle: site.role,
   email: `mailto:${site.email}`,
+  telephone: site.phone,
   url: site.url,
   address: { "@type": "PostalAddress", addressLocality: site.location },
   sameAs: Object.values(site.socials).filter(Boolean),
-  knowsAbout: site.skills.map((s) => s.name),
+  knowsAbout: [...site.skills],
 };
 
 export default function RootLayout({
@@ -94,12 +89,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${hand.variable} ${mono.variable} ${body.variable}`}
+      className={`${display.variable} ${mono.variable} ${body.variable}`}
     >
-      <body className="mat">
+      <body>
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:border-2 focus:border-ink focus:bg-marker focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:font-bold"
+          className="label sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[200] focus:bg-ink focus:px-4 focus:py-3 focus:text-paper"
         >
           Skip to content
         </a>

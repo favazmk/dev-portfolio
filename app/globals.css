@@ -2,40 +2,28 @@
 
 /* ============================================================
    DESIGN TOKENS
-   Scrapbook system (home) + editorial system (case studies).
+   A brand-manual system: near-black, paper, one grey, one red.
+   Nothing else gets to be a colour.
    ============================================================ */
 @theme {
-  /* Paper & ink */
-  --color-paper: #f5f3ec;
-  --color-paper-2: #ebe8dd;
-  --color-ink: #16150f;
-  --color-ink-soft: #4b483c;
-  --color-rule: #cfd8e3;
+  --color-ink: #0e0e0e;
+  --color-ink-2: #1c1c1c;
+  --color-paper: #ffffff;
+  --color-mist: #efeeea;
+  --color-mist-2: #e4e3de;
+  --color-line: #d8d7d2;
+  --color-line-dark: #2e2e2e;
+  --color-muted: #6e6d68;
+  --color-muted-dark: #8e8d87;
+  --color-signal: #e8352b;
 
-  /* Sticker palette — flat, saturated, print-like */
-  --color-marker: #ffd23f;
-  --color-sky: #2f6bff;
-  --color-grass: #16c172;
-  --color-bubble: #ff5fa2;
-  --color-tangerine: #ff7a31;
-  --color-lilac: #b08bff;
-
-  /* Editorial (case study) system */
-  --color-blueprint: #1f3fd8;
-  --color-blueprint-ink: #0b1a66;
-  --color-signal: #ff4d1c;
-
-  /* Tape */
-  --color-tape: #e8dfb8;
-
-  --radius-sticker: 0.375rem;
+  --radius-none: 0px;
 }
 
 @theme inline {
-  --font-display: var(--font-display-face), "Arial Black", sans-serif;
-  --font-hand: var(--font-hand-face), "Comic Sans MS", cursive;
-  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --font-display: var(--font-display-face), "Helvetica Neue", Arial, sans-serif;
   --font-body: var(--font-body-face), system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
 }
 
 /* ============================================================
@@ -52,155 +40,241 @@ html {
 }
 
 body {
-  background: var(--color-paper-2);
+  background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-body);
   overflow-x: clip;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: var(--color-marker);
-  color: var(--color-ink);
+  background: var(--color-signal);
+  color: #fff;
 }
 
 :focus-visible {
-  outline: 3px solid var(--color-sky);
-  outline-offset: 2px;
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
 }
 
 /* ============================================================
-   PAPER SURFACES
-   The page sits on a sheet of ruled paper; the viewport margins
-   show a cutting-mat grid behind it.
+   LAYOUT
+   One container, one gutter, everywhere. The 16px floor keeps
+   the page off the edge of a phone.
    ============================================================ */
-.mat {
-  background-color: #9a9a9a;
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-    linear-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.14) 1px, transparent 1px);
-  background-size: 14px 14px, 14px 14px, 70px 70px, 70px 70px;
+.shell {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 16px;
 }
 
-.sheet {
-  background-color: var(--color-paper);
-  background-image: repeating-linear-gradient(
-    to bottom,
-    transparent 0,
-    transparent 33px,
-    rgba(120, 145, 180, 0.22) 33px,
-    rgba(120, 145, 180, 0.22) 34px
-  );
-  background-position: 0 0;
+@media (min-width: 640px)  { .shell { padding-inline: 32px; } }
+@media (min-width: 1024px) { .shell { padding-inline: 56px; } }
+
+/* ============================================================
+   TYPE
+   Display is set tight and large; labels are mono, small and
+   widely tracked — the two voices the reference system uses.
+   ============================================================ */
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 0.92;
+  text-wrap: balance;
 }
 
-/* Fibrous paper tooth — very low contrast, no image request */
-.sheet::before {
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.numeral {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+.prose-col p {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--color-ink-2);
+}
+.prose-col p + p { margin-top: 1.1em; }
+
+@media (min-width: 1024px) {
+  .prose-col p { font-size: 1.125rem; }
+}
+
+/* ============================================================
+   RULES
+   A hairline with a short red cap at its head — the one piece of
+   ornament the system allows, used to open a section.
+   ============================================================ */
+.rule {
+  border-top: 1px solid var(--color-line);
+}
+.on-dark .rule {
+  border-top-color: var(--color-line-dark);
+}
+
+.rule-signal {
+  position: relative;
+  border-top: 1px solid var(--color-line);
+}
+.on-dark .rule-signal {
+  border-top-color: var(--color-line-dark);
+}
+.rule-signal::before {
   content: "";
   position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.5;
-  background-image:
-    radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
-    radial-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px);
-  background-size: 23px 23px, 31px 31px;
-  background-position: 0 0, 11px 17px;
+  top: -2px;
+  left: 0;
+  width: 56px;
+  height: 3px;
+  background: var(--color-signal);
 }
 
-/* ============================================================
-   TAPE
-   ============================================================ */
-.tape {
-  position: absolute;
-  background: linear-gradient(
-    105deg,
-    rgba(232, 223, 184, 0.92),
-    rgba(222, 211, 165, 0.86) 42%,
-    rgba(238, 231, 199, 0.9)
-  );
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
-  pointer-events: none;
-}
-
-.tape::after {
+/* The lone red dot used as a registration mark */
+.dot-signal::after {
   content: "";
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    90deg,
-    transparent 0 3px,
-    rgba(255, 255, 255, 0.32) 3px 4px
-  );
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  margin-left: 0.5em;
+  vertical-align: 0.35em;
+  background: var(--color-signal);
 }
 
 /* ============================================================
-   STICKERS / CHIPS
+   SURFACES
    ============================================================ */
-.chip {
+.on-dark {
+  background: var(--color-ink);
+  color: var(--color-paper);
+}
+.on-dark .text-muted-auto { color: var(--color-muted-dark); }
+.text-muted-auto { color: var(--color-muted); }
+
+/* ============================================================
+   LOGO WALL
+   Every mark is stored as a white silhouette, so a light surface
+   just inverts it. Keeps a mixed-provenance set visually single.
+   ============================================================ */
+.logo-mark {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+/* On light surfaces the white silhouette is inverted to ink. */
+.logo-invert { filter: invert(1); }
+
+.logo-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.75rem 1.25rem;
+  min-height: 108px;
+  opacity: 0.55;
+  transition: opacity 220ms ease;
+}
+.logo-cell:hover { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-cell { transition: none; }
+}
+
+@media (min-width: 768px) {
+  .logo-cell { min-height: 132px; padding: 2.25rem 1.75rem; }
+}
+
+/* ============================================================
+   WORK ROWS
+   A case study reads as a line in an index that happens to open.
+   ============================================================ */
+/* No display here — the row sets its own flex/grid via utilities. */
+.work-row {
+  position: relative;
+  transition: background-color 200ms ease;
+}
+.work-row:hover { background: var(--color-mist); }
+.on-dark .work-row:hover { background: var(--color-ink-2); }
+
+.work-row .arrow {
+  transition: transform 220ms ease;
+}
+.work-row:hover .arrow { transform: translateX(5px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .work-row, .work-row .arrow { transition: none; }
+  .work-row:hover .arrow { transform: none; }
+}
+
+/* ============================================================
+   TAGS
+   ============================================================ */
+.tag {
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.3rem 0.75rem;
-  border: 2px solid var(--color-ink);
-  border-radius: var(--radius-sticker);
-  font-family: var(--font-body);
-  font-weight: 700;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-  box-shadow: 2px 2px 0 var(--color-ink);
+  border: 1px solid var(--color-line);
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  white-space: nowrap;
 }
-
-.chip-sm {
-  padding: 0.15rem 0.5rem;
-  font-size: 0.6875rem;
-  box-shadow: 1.5px 1.5px 0 var(--color-ink);
-}
-
-/* Marker highlight behind inline text */
-.marker {
-  background-image: linear-gradient(
-    to bottom,
-    transparent 12%,
-    var(--hl, var(--color-marker)) 12%,
-    var(--hl, var(--color-marker)) 88%,
-    transparent 88%
-  );
-  padding-inline: 0.15em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+.on-dark .tag {
+  border-color: var(--color-line-dark);
+  color: var(--color-muted-dark);
 }
 
 /* ============================================================
-   NOTCHED CARD — clipped top-right corner, like a torn tab
+   LINKS
+   An underline that grows from the left on hover.
    ============================================================ */
-.notched {
-  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+.link-ul {
+  position: relative;
+  display: inline-block;
 }
-
-.notched-lg {
-  clip-path: polygon(0 0, calc(100% - 64px) 0, 100% 64px, 100% 100%, 0 100%);
+.link-ul::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 240ms ease;
 }
+.link-ul:hover::after { transform: scaleX(1); }
 
-/* Angled folder tab */
-.tab-shape {
-  clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+@media (prefers-reduced-motion: reduce) {
+  .link-ul::after { transition: none; }
 }
 
 /* ============================================================
-   REVEAL — IntersectionObserver driven, CSS only
+   REVEAL
+   Scroll-in, neutralised entirely for reduced-motion users.
    ============================================================ */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(18px);
+  transform: translateY(14px);
   transition:
-    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  transition-delay: var(--reveal-delay, 0ms);
+    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms),
+    transform 620ms cubic-bezier(0.22, 1, 0.36, 1) var(--reveal-delay, 0ms);
 }
-
 [data-reveal="in"] {
   opacity: 1;
   transform: none;
@@ -212,55 +286,4 @@ body {
     transform: none;
     transition: none;
   }
-}
-
-/* ============================================================
-   EDITORIAL (case study) SYSTEM
-   ============================================================ */
-.blueprint {
-  background-color: var(--color-blueprint);
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
-  background-size: 28px 28px, 28px 28px;
-}
-
-.rule-strike {
-  position: relative;
-}
-
-/* Marker stroke swiped UNDER the heading, not through it. */
-.rule-strike::after {
-  content: "";
-  position: absolute;
-  left: -1%;
-  right: -3%;
-  bottom: -0.12em;
-  height: 0.14em;
-  background: var(--color-signal);
-  transform: rotate(-1.1deg);
-  border-radius: 2px;
-}
-
-/* ============================================================
-   LENIS
-   ============================================================ */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-/* Print: drop the decoration, keep the content */
-@media print {
-  .mat, .tape, .sheet::before { display: none !important; }
-  .sheet { background: #fff !important; }
 }

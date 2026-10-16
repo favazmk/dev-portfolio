@@ -1,10 +1,13 @@
 # Favaz MK — Portfolio
 
-A scrapbook-styled portfolio: the site sits on a sheet of ruled paper over a
-cutting-mat grid, with taped photos, sticker chips and marker annotations.
-Case studies switch to a second, editorial system — oversized type, numbered
-sections and blueprint panels — so the work reads as substantial rather than
-decorative.
+A portfolio set like a brand manual: near-black and paper, one grey, one red,
+and type doing the work. Every section opens the same way — a hairline capped in
+red, a two-digit number, a label — so a long page reads as chapters of one
+document rather than a stack of designs.
+
+The page declares its own shape up front: a numbered contents list, then
+clients, then work split into the two halves of the practice, then the writing,
+the archive and contact.
 
 **Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Lenis
 
@@ -24,48 +27,74 @@ npm run build    # production build
 
 Everything lives in [`config/site.ts`](config/site.ts):
 
-- **`site`** — name, role, location, the hero statement, the handwritten note,
-  skills, stats and contact copy. `socials` entries that are empty strings are
-  hidden automatically; fill one in and the link appears.
+- **`site`** — name, roles, location, the hero statement, the intro, the two
+  disciplines, skills, stats, the writing practice and contact copy. `socials`
+  entries that are empty strings are hidden automatically.
+- **`site.index`** — the numbered contents list. Each entry's `href` must match
+  a section `id` on the page.
 - **`site.url`** — set this to the production domain after deploying. It feeds
   the sitemap, robots.txt, OG tags and JSON-LD.
+- **`clients`** — the logo wall. `work: "build"` and `work: "brand"` split it
+  into the two grids.
 - **`projects`** — the case studies. Each has a `track` of `"systems"` or
   `"craft"`, which decides the gallery it appears in; every project gets a page
   at `/work/<slug>` automatically.
-- **`archiveRepos`** — the "more work" grid. The curated `note`, `live` and
-  `language` always render; the GitHub API only adds star counts and fills in a
-  missing language, so the grid is complete even when the API is unreachable.
+- **`archiveRepos`** — the "also shipped" table. The curated `title`, `note`,
+  `live` and `language` always render; the GitHub API only adds star counts and
+  fills in a missing language, so the table is complete even when the API is
+  unreachable.
 
 ### Adding a project
 
 Append an entry to `projects`. The `sections` array is the case study body —
 each entry is a numbered section, and any section with a `points` array renders
-on a blue blueprint panel instead of paper. Nothing else needs to change: the
-route, sitemap entry and "next project" link all follow from the data.
+a spec list beside the prose. Nothing else needs to change: the route, sitemap
+entry and "next project" link all follow from the data.
 
 ### Images
 
-Project art lives in `public/work/`. Set `image` to its path, or leave it as an
+Project art lives in `public/work/`. Set `image` to its path, or leave it an
 empty string — projects with no interface to photograph (CLI tools, services)
-render a generated typographic panel instead of a borrowed stock photo.
+render a typographic panel instead of a borrowed stock photo.
+
+## Client logos
+
+Marks live in `public/logos/` (`agency/` holds the brands the copy was written
+for). They arrive from a dozen different brands in a dozen different palettes,
+so **every file is stored as a white silhouette with an alpha channel**,
+whatever colour the brand actually uses.
+
+That one rule is what lets a mixed set read as a single designed wall:
+[`LogoMark`](components/ui/LogoMark.tsx) uses the file as-is on ink and inverts
+it to ink on paper. A brand whose mark we don't hold falls back to its name set
+in the display face, which is a legitimate lockup here rather than a hole.
+
+To add one: reduce it to white-on-transparent, trim the bounding box, cap the
+long edge around 900px, drop it in `public/logos/`, and point a `clients` entry
+at it. Marks that knock their letterforms out of a solid badge (and so can't
+become a flat silhouette) keep the badge as the white shape with the letters
+punched back out.
 
 ## Customizing the look
 
-- **Colors and paper:** the `@theme` block at the top of
-  [`app/globals.css`](app/globals.css). `--color-paper`/`--color-ink` set the
-  sheet, the sticker palette drives the chips and cards, and `--color-blueprint`
-  / `--color-signal` are the case-study system.
-- **Textures:** `.mat` is the cutting-mat backdrop, `.sheet` is the ruled paper.
-- **Fonts:** swapped in [`app/layout.tsx`](app/layout.tsx) — a blocky display
-  face, a marker hand, a mono for labels and a sans for long-form reading.
+- **Colour and type scale:** the `@theme` block at the top of
+  [`app/globals.css`](app/globals.css). The whole system is `--color-ink`,
+  `--color-paper`, `--color-mist`, `--color-line` and `--color-signal` — the red
+  is an accent, never a surface.
+- **Section rule:** `.rule-signal` is the hairline with the red cap that opens
+  every section; `.rule` is the plain hairline used between rows.
+- **Surfaces:** `.on-dark` flips a section to ink and re-points the muted text
+  and border tokens, so the same markup works on either surface.
+- **Fonts:** [`app/layout.tsx`](app/layout.tsx) — Geist for display, Geist Mono
+  for labels and numerals, Inter for long-form reading.
 
 ## Accessibility & performance
 
-- Fully static: 14 prerendered routes, ~121 kB first load JS.
-- `prefers-reduced-motion` disables smooth scrolling and renders every reveal in
-  its final state.
-- Decoration (tape, doodles, traffic lights) is `aria-hidden`; project cards are
-  a single link target; skip link to `#content`.
+- Fully static: 21 prerendered routes, ~121 kB first load JS.
+- `prefers-reduced-motion` disables smooth scrolling, hover transforms and
+  renders every reveal in its final state.
+- Decoration is `aria-hidden`; project rows are a single link target; skip link
+  to `#content`; no horizontal scroll at 390px.
 - Images are `next/image` with explicit `sizes`.
 
 ## Deploying to Vercel

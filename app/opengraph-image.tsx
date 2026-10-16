@@ -14,61 +14,63 @@ export default function OpengraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "80px",
-          background: "#f5f3ec",
-          backgroundImage:
-            "repeating-linear-gradient(to bottom, transparent 0, transparent 47px, rgba(120,145,180,0.3) 47px, rgba(120,145,180,0.3) 48px)",
+          justifyContent: "space-between",
+          padding: "72px",
+          background: "#0e0e0e",
+          color: "#ffffff",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            fontSize: 26,
-            fontFamily: "monospace",
-            letterSpacing: 4,
-            color: "#4b483c",
-          }}
-        >
-          {site.role.toUpperCase()}
+        {/* Head rule, capped in red */}
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", height: 4, width: 150, background: "#e8352b" }} />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              marginTop: 26,
+              fontSize: 22,
+              letterSpacing: 4,
+              textTransform: "uppercase",
+              color: "#8e8d87",
+            }}
+          >
+            <div style={{ display: "flex" }}>{site.role}</div>
+            <div style={{ display: "flex" }}>©{site.year}</div>
+          </div>
         </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 18,
-            fontSize: 132,
-            fontWeight: 900,
-            color: "#16150f",
-            letterSpacing: -4,
-          }}
-        >
-          {site.name}
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", fontSize: 128, fontWeight: 600, letterSpacing: -5 }}>
+            {site.name}
+          </div>
+          <div
+            style={{
+              display: "flex",
+              marginTop: 26,
+              fontSize: 31,
+              lineHeight: 1.35,
+              maxWidth: 880,
+              color: "rgba(255,255,255,0.72)",
+            }}
+          >
+            {site.tagline}
+          </div>
         </div>
+
         <div
           style={{
             display: "flex",
-            marginTop: 28,
-            fontSize: 36,
-            color: "#16150f",
-            maxWidth: 900,
-            lineHeight: 1.3,
+            justifyContent: "space-between",
+            borderTop: "1px solid #2e2e2e",
+            paddingTop: 24,
+            fontSize: 22,
+            letterSpacing: 3,
+            textTransform: "uppercase",
+            color: "#8e8d87",
           }}
         >
-          {site.tagline}
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 44,
-            padding: "14px 28px",
-            background: "#ffd23f",
-            border: "3px solid #16150f",
-            fontSize: 26,
-            fontFamily: "monospace",
-            alignSelf: "flex-start",
-          }}
-        >
-          {site.url.replace("https://", "")}
+          <div style={{ display: "flex" }}>{site.location}</div>
+          <div style={{ display: "flex" }}>{site.url.replace("https://", "")}</div>
         </div>
       </div>
     ),
