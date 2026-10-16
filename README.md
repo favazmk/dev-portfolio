@@ -1,13 +1,16 @@
-# Favaz MK — 3D Portfolio
+# Favaz MK — Portfolio
 
-Immersive, scroll-driven developer portfolio. A continuous WebGL scene (morphing
-blob + particle field) sits behind the page; scrolling drives the camera through
-it while GSAP choreographs section reveals, a pinned horizontal project gallery,
-and a self-drawing timeline. Mobile-first, with reduced 3D complexity on phones
-and full `prefers-reduced-motion` support.
+A scrapbook-styled portfolio: the site sits on a sheet of ruled paper over a
+cutting-mat grid, with taped photos, sticker chips and marker annotations.
+Case studies switch to a second, editorial system — oversized type, numbered
+sections and blueprint panels — so the work reads as substantial rather than
+decorative.
 
-**Stack:** Next.js (App Router) · TypeScript · React Three Fiber + drei ·
-GSAP ScrollTrigger · Lenis · Tailwind CSS v4
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS v4 · Lenis
+
+No 3D, no animation library. Scroll reveals are IntersectionObserver plus CSS
+transitions; the only runtime dependency beyond React is Lenis, loaded
+dynamically and skipped entirely for `prefers-reduced-motion`.
 
 ## Getting started
 
@@ -17,46 +20,56 @@ npm run dev      # http://localhost:3000
 npm run build    # production build
 ```
 
-## Editing content — you only ever touch one file
+## Editing content — one file
 
-All personal data lives in [`config/site.ts`](config/site.ts):
+Everything lives in [`config/site.ts`](config/site.ts):
 
-- **name / role / tagline / email** — hero, contact, and SEO metadata
-- **socials** — LinkedIn and X are empty strings; fill them in and the links
-  appear automatically in the contact section
-- **bio / stats / skills / timeline** — the About, Skills, and Journey sections
-- **featuredProjects** — the project gallery. Order here = display order.
-  Each entry's `repo` must match the GitHub repo name; language, topics, and
-  star counts are merged in from the GitHub API at build time (revalidated
-  daily) and the site still renders fully if the API is unreachable.
-- **url** — set this to your production domain after deploying (it feeds the
-  sitemap, robots.txt, OG tags, and JSON-LD)
+- **`site`** — name, role, location, the hero statement, the handwritten note,
+  skills, stats and contact copy. `socials` entries that are empty strings are
+  hidden automatically; fill one in and the link appears.
+- **`site.url`** — set this to the production domain after deploying. It feeds
+  the sitemap, robots.txt, OG tags and JSON-LD.
+- **`projects`** — the case studies. Each has a `track` of `"systems"` or
+  `"craft"`, which decides the gallery it appears in; every project gets a page
+  at `/work/<slug>` automatically.
+- **`archiveRepos`** — the "more work" grid. The curated `note`, `live` and
+  `language` always render; the GitHub API only adds star counts and fills in a
+  missing language, so the grid is complete even when the API is unreachable.
+
+### Adding a project
+
+Append an entry to `projects`. The `sections` array is the case study body —
+each entry is a numbered section, and any section with a `points` array renders
+on a blue blueprint panel instead of paper. Nothing else needs to change: the
+route, sitemap entry and "next project" link all follow from the data.
+
+### Images
+
+Project art lives in `public/work/`. Set `image` to its path, or leave it as an
+empty string — projects with no interface to photograph (CLI tools, services)
+render a generated typographic panel instead of a borrowed stock photo.
 
 ## Customizing the look
 
-- **Colors:** edit the `@theme` block in [`app/globals.css`](app/globals.css)
-  (`--color-accent`, `--color-accent2`, `--color-night`).
-- **3D scene:** [`components/three/Scene.tsx`](components/three/Scene.tsx) —
-  `PALETTE` is the per-section color journey, `CAM_STOPS` is the camera path
-  keyframes, and the `Blob` / `Particles` / `Rings` components are the scene
-  contents. Particle counts and geometry detail are already reduced on mobile.
-- **Fonts:** swap `Space_Grotesk` / `Inter` in
-  [`app/layout.tsx`](app/layout.tsx).
+- **Colors and paper:** the `@theme` block at the top of
+  [`app/globals.css`](app/globals.css). `--color-paper`/`--color-ink` set the
+  sheet, the sticker palette drives the chips and cards, and `--color-blueprint`
+  / `--color-signal` are the case-study system.
+- **Textures:** `.mat` is the cutting-mat backdrop, `.sheet` is the ruled paper.
+- **Fonts:** swapped in [`app/layout.tsx`](app/layout.tsx) — a blocky display
+  face, a marker hand, a mono for labels and a sans for long-form reading.
 
-## Performance & accessibility notes
+## Accessibility & performance
 
-- WebGL is feature-detected; without it the site falls back to a static
-  gradient backdrop.
-- `prefers-reduced-motion` disables smooth scrolling, scene idle motion, and
-  swaps reveals for static text.
-- The custom cursor, magnetic buttons, card tilt, and pointer parallax only
-  activate on `pointer: fine` devices.
-- All split-text headings keep the intact string in `aria-label`; the skills
-  cluster has an accessible list twin.
+- Fully static: 14 prerendered routes, ~121 kB first load JS.
+- `prefers-reduced-motion` disables smooth scrolling and renders every reveal in
+  its final state.
+- Decoration (tape, doodles, traffic lights) is `aria-hidden`; project cards are
+  a single link target; skip link to `#content`.
+- Images are `next/image` with explicit `sizes`.
 
 ## Deploying to Vercel
 
-1. Push this folder to a GitHub repo.
-2. [vercel.com/new](https://vercel.com/new) → import the repo → deploy
-   (zero config needed).
-3. Set `url` in `config/site.ts` to the final domain and redeploy.
+1. Push to GitHub.
+2. [vercel.com/new](https://vercel.com/new) → import the repo → deploy.
+3. Set `site.url` in `config/site.ts` to the final domain and redeploy.

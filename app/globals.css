@@ -1,43 +1,250 @@
 @import "tailwindcss";
 
+/* ============================================================
+   DESIGN TOKENS
+   Scrapbook system (home) + editorial system (case studies).
+   ============================================================ */
 @theme {
-  /* Named "night" — "base" would collide with the text-base font-size utility */
-  --color-night: #0a0a0f;
-  --color-surface: #12121a;
-  --color-accent: #8b5cf6;
-  --color-accent2: #22d3ee;
+  /* Paper & ink */
+  --color-paper: #f5f3ec;
+  --color-paper-2: #ebe8dd;
+  --color-ink: #16150f;
+  --color-ink-soft: #4b483c;
+  --color-rule: #cfd8e3;
+
+  /* Sticker palette — flat, saturated, print-like */
+  --color-marker: #ffd23f;
+  --color-sky: #2f6bff;
+  --color-grass: #16c172;
+  --color-bubble: #ff5fa2;
+  --color-tangerine: #ff7a31;
+  --color-lilac: #b08bff;
+
+  /* Editorial (case study) system */
+  --color-blueprint: #1f3fd8;
+  --color-blueprint-ink: #0b1a66;
+  --color-signal: #ff4d1c;
+
+  /* Tape */
+  --color-tape: #e8dfb8;
+
+  --radius-sticker: 0.375rem;
 }
 
 @theme inline {
-  --font-display: var(--font-space-grotesk), sans-serif;
-  --font-body: var(--font-inter), sans-serif;
+  --font-display: var(--font-display-face), "Arial Black", sans-serif;
+  --font-hand: var(--font-hand-face), "Comic Sans MS", cursive;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
+  --font-body: var(--font-body-face), system-ui, sans-serif;
 }
 
+/* ============================================================
+   BASE
+   ============================================================ */
 html {
   overflow-x: clip;
-  scrollbar-color: rgba(139, 92, 246, 0.5) #0a0a0f;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
 
 body {
-  background: var(--color-night);
-  color: #fff;
+  background: var(--color-paper-2);
+  color: var(--color-ink);
   font-family: var(--font-body);
-  -webkit-font-smoothing: antialiased;
   overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--color-accent);
-  color: #fff;
+  background: var(--color-marker);
+  color: var(--color-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent2);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: 3px solid var(--color-sky);
+  outline-offset: 2px;
 }
 
-/* Lenis recommended styles */
+/* ============================================================
+   PAPER SURFACES
+   The page sits on a sheet of ruled paper; the viewport margins
+   show a cutting-mat grid behind it.
+   ============================================================ */
+.mat {
+  background-color: #9a9a9a;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(rgba(0, 0, 0, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.14) 1px, transparent 1px);
+  background-size: 14px 14px, 14px 14px, 70px 70px, 70px 70px;
+}
+
+.sheet {
+  background-color: var(--color-paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 33px,
+    rgba(120, 145, 180, 0.22) 33px,
+    rgba(120, 145, 180, 0.22) 34px
+  );
+  background-position: 0 0;
+}
+
+/* Fibrous paper tooth — very low contrast, no image request */
+.sheet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.5;
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.035) 1px, transparent 1px),
+    radial-gradient(rgba(0, 0, 0, 0.025) 1px, transparent 1px);
+  background-size: 23px 23px, 31px 31px;
+  background-position: 0 0, 11px 17px;
+}
+
+/* ============================================================
+   TAPE
+   ============================================================ */
+.tape {
+  position: absolute;
+  background: linear-gradient(
+    105deg,
+    rgba(232, 223, 184, 0.92),
+    rgba(222, 211, 165, 0.86) 42%,
+    rgba(238, 231, 199, 0.9)
+  );
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
+  pointer-events: none;
+}
+
+.tape::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent 0 3px,
+    rgba(255, 255, 255, 0.32) 3px 4px
+  );
+}
+
+/* ============================================================
+   STICKERS / CHIPS
+   ============================================================ */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.75rem;
+  border: 2px solid var(--color-ink);
+  border-radius: var(--radius-sticker);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  box-shadow: 2px 2px 0 var(--color-ink);
+}
+
+.chip-sm {
+  padding: 0.15rem 0.5rem;
+  font-size: 0.6875rem;
+  box-shadow: 1.5px 1.5px 0 var(--color-ink);
+}
+
+/* Marker highlight behind inline text */
+.marker {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 12%,
+    var(--hl, var(--color-marker)) 12%,
+    var(--hl, var(--color-marker)) 88%,
+    transparent 88%
+  );
+  padding-inline: 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* ============================================================
+   NOTCHED CARD — clipped top-right corner, like a torn tab
+   ============================================================ */
+.notched {
+  clip-path: polygon(0 0, calc(100% - 34px) 0, 100% 34px, 100% 100%, 0 100%);
+}
+
+.notched-lg {
+  clip-path: polygon(0 0, calc(100% - 64px) 0, 100% 64px, 100% 100%, 0 100%);
+}
+
+/* Angled folder tab */
+.tab-shape {
+  clip-path: polygon(0 0, 100% 0, calc(100% - 18px) 100%, 0 100%);
+}
+
+/* ============================================================
+   REVEAL — IntersectionObserver driven, CSS only
+   ============================================================ */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================================
+   EDITORIAL (case study) SYSTEM
+   ============================================================ */
+.blueprint {
+  background-color: var(--color-blueprint);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.09) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px;
+}
+
+.rule-strike {
+  position: relative;
+}
+
+/* Marker stroke swiped UNDER the heading, not through it. */
+.rule-strike::after {
+  content: "";
+  position: absolute;
+  left: -1%;
+  right: -3%;
+  bottom: -0.12em;
+  height: 0.14em;
+  background: var(--color-signal);
+  transform: rotate(-1.1deg);
+  border-radius: 2px;
+}
+
+/* ============================================================
+   LENIS
+   ============================================================ */
 html.lenis,
 html.lenis body {
   height: auto;
@@ -52,80 +259,8 @@ html.lenis body {
   overflow: hidden;
 }
 
-@layer components {
-  .glass {
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.09);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-  }
-
-  .text-gradient {
-    background: linear-gradient(
-      92deg,
-      var(--color-accent),
-      var(--color-accent2)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-
-  /* background-clip: text doesn't reach through the reveal masks, so each
-     split word carries its own gradient */
-  .text-gradient .reveal-inner {
-    background: linear-gradient(
-      92deg,
-      var(--color-accent),
-      var(--color-accent2)
-    );
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-}
-
-/* Masked word/char reveal (animated by GSAP) */
-.reveal {
-  display: inline-block;
-}
-.reveal .reveal-mask {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-}
-.reveal .reveal-inner {
-  display: inline-block;
-  will-change: transform;
-}
-
-/* Hero scroll hint */
-@keyframes scroll-dot {
-  0% {
-    transform: translateY(0);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(26px);
-    opacity: 0;
-  }
-}
-.scroll-hint-dot {
-  animation: scroll-dot 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .scroll-hint-dot {
-    animation: none;
-  }
-  html {
-    scroll-behavior: auto;
-  }
-  /* Without the pinned scroll animation the project row must scroll natively */
-  .projects-viewport {
-    overflow-x: auto;
-  }
+/* Print: drop the decoration, keep the content */
+@media print {
+  .mat, .tape, .sheet::before { display: none !important; }
+  .sheet { background: #fff !important; }
 }

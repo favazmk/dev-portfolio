@@ -1,36 +1,32 @@
-import { site } from "@/config/site";
+import { archiveRepos, site, type ArchiveEntry } from "@/config/site";
 
-export interface Project {
-  repo: string;
-  title: string;
-  description: string;
-  live: string;
-  repoUrl: string;
-  language: string;
-  topics: string[];
+export interface ArchiveItem extends ArchiveEntry {
+  url: string;
   stars: number;
 }
 
 interface GitHubRepo {
   name: string;
   html_url: string;
+  description: string | null;
   homepage: string | null;
   language: string | null;
-  topics?: string[];
   stargazers_count: number;
 }
 
 /**
- * Fetches public repos at build time (revalidated daily) and merges them with
- * the curated featured list in config/site.ts. If the API is unreachable or
- * rate-limited, the curated config data alone is enough to render the site.
+ * Enriches the curated archive list with live GitHub data at build time
+ * (revalidated daily). The curated note, live URL and language in
+ * config/site.ts always render, so the grid is complete even when the API is
+ * unreachable or rate-limited — the API only adds star counts and fills in a
+ * language we didn't curate.
  */
-export async function getProjects(): Promise<Project[]> {
+export async function getArchive(): Promise<ArchiveItem[]> {
   let repos: GitHubRepo[] = [];
 
   try {
     const res = await fetch(
-      `https://api.github.com/users/${site.github}/repos?sort=updated&per_page=50`,
+      `https://api.github.com/users/${site.github}/repos?sort=updated&per_page=100`,
       {
         headers: { Accept: "application/vnd.github+json" },
         next: { revalidate: 86400 },
@@ -38,21 +34,18 @@ export async function getProjects(): Promise<Project[]> {
     );
     if (res.ok) repos = (await res.json()) as GitHubRepo[];
   } catch {
-    // Offline / rate-limited — fall back to config data.
+    // Offline or rate-limited — the curated list alone is enough.
   }
 
-  return site.featuredProjects.map((f) => {
+  return archiveRepos.map((entry) => {
     const match = repos.find(
-      (r) => r.name.toLowerCase() === f.repo.toLowerCase()
+      (r) => r.name.toLowerCase() === entry.repo.toLowerCase()
     );
     return {
-      repo: f.repo,
-      title: f.title,
-      description: f.description,
-      live: f.live || match?.homepage || "",
-      repoUrl: match?.html_url ?? `https://github.com/${site.github}/${f.repo}`,
-      language: match?.language ?? f.language,
-      topics: match?.topics?.slice(0, 4) ?? [],
+      ...entry,
+      live: entry.live || match?.homepage || "",
+      language: entry.language || match?.language || "",
+      url: match?.html_url ?? `https://github.com/${site.github}/${entry.repo}`,
       stars: match?.stargazers_count ?? 0,
     };
   });

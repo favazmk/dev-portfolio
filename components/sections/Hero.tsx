@@ -1,122 +1,103 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Reveal from "@/components/Reveal";
-import Magnetic from "@/components/Magnetic";
-import { scrollToId, flags } from "@/lib/scroll";
 import { site } from "@/config/site";
-
-gsap.registerPlugin(ScrollTrigger);
+import Sticker from "@/components/ui/Sticker";
+import Tape from "@/components/ui/Tape";
+import Reveal from "@/components/Reveal";
+import { ArrowCurve, Star, Underline } from "@/components/ui/Doodle";
 
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const fadeRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      const mm = gsap.matchMedia();
-
-      mm.add("(prefers-reduced-motion: no-preference)", () => {
-        // Secondary elements fade in once the preloader clears.
-        const items = fadeRef.current
-          ? Array.from(fadeRef.current.children)
-          : [];
-        gsap.set(items, { opacity: 0, y: 24 });
-        const play = () =>
-          gsap.to(items, {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "power3.out",
-            stagger: 0.12,
-            delay: 0.5,
-          });
-        if (flags.ready) play();
-        else window.addEventListener("site:ready", play, { once: true });
-
-        // Content drifts up + fades as you scroll past the hero.
-        gsap.to(sectionRef.current!.querySelector(".hero-content"), {
-          yPercent: -18,
-          opacity: 0,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "bottom 35%",
-            scrub: true,
-          },
-        });
-      });
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      id="hero"
-      className="relative flex min-h-svh items-center justify-center overflow-hidden"
-    >
-      <div className="hero-content flex flex-col items-center px-6 text-center">
-        <Reveal
-          as="p"
-          onReady
-          delay={0.35}
-          className="mb-5 text-xs uppercase tracking-[0.4em] text-accent2 md:text-sm"
-        >
-          {site.role}
+    <section className="relative px-5 pt-12 pb-14 sm:px-10 sm:pt-20 sm:pb-24">
+      {/* "my name is" label */}
+      <Reveal className="relative mx-auto w-fit">
+        <p className="font-hand text-2xl text-ink-soft">my name is</p>
+        <Underline
+          aria-hidden="true"
+          className="mx-auto h-2 w-24 text-ink-soft/50"
+        />
+      </Reveal>
+
+      {/* Name in a hand-drawn box, flanked by sticker tags */}
+      <div className="relative mx-auto mt-3 flex max-w-5xl flex-wrap items-center justify-center gap-4 sm:gap-8">
+        <Reveal delay={60} className="order-2 sm:order-1">
+          <Sticker tone={site.heroTags[0].tone} rotate={-4}>
+            {site.heroTags[0].text}
+          </Sticker>
         </Reveal>
 
-        <Reveal
-          as="h1"
-          mode="chars"
-          onReady
-          delay={0.45}
-          stagger={0.045}
-          className="font-display text-[clamp(3.2rem,15vw,11rem)] leading-[0.95] font-bold tracking-tight uppercase"
-        >
-          {site.name}
-        </Reveal>
-
-        <div ref={fadeRef} className="mt-7 flex flex-col items-center">
-          <p className="max-w-md text-sm leading-relaxed text-white/80 md:max-w-lg md:text-base">
-            {site.tagline}
-          </p>
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-            <Magnetic>
-              <button
-                onClick={() => scrollToId("#projects")}
-                className="rounded-full bg-gradient-to-r from-accent to-accent2 px-7 py-3.5 text-sm font-semibold text-white transition-transform hover:scale-[1.03] active:scale-95"
-              >
-                View my work
-              </button>
-            </Magnetic>
-            <Magnetic>
-              <button
-                onClick={() => scrollToId("#contact")}
-                className="glass rounded-full px-7 py-3.5 text-sm font-semibold text-white/85 transition-colors hover:text-white"
-              >
-                Get in touch
-              </button>
-            </Magnetic>
+        <Reveal delay={120} className="order-1 w-full sm:order-2 sm:w-auto">
+          <div className="relative mx-auto w-fit">
+            <span
+              aria-hidden="true"
+              className="absolute -inset-x-5 -inset-y-3 rounded-[14px] border-[3px] border-signal"
+              style={{ transform: "rotate(-1.2deg)" }}
+            />
+            <h1 className="relative font-display text-[clamp(2.75rem,13vw,7rem)] leading-[0.95] tracking-tight">
+              {site.firstName}
+            </h1>
           </div>
-        </div>
+        </Reveal>
+
+        <Reveal delay={180} className="order-3">
+          <Sticker tone={site.heroTags[1].tone} rotate={5}>
+            {site.heroTags[1].text}
+          </Sticker>
+        </Reveal>
       </div>
 
-      <div
-        aria-hidden
-        className="absolute bottom-20 left-1/2 flex -translate-x-1/2 flex-col items-center gap-2 md:bottom-8"
+      {/* Role + availability + location row */}
+      <Reveal
+        delay={240}
+        className="mx-auto mt-8 flex max-w-3xl flex-wrap items-center justify-center gap-2.5"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">
-          Scroll
+        <Sticker tone="marker" small rotate={-2}>
+          {site.role}
+        </Sticker>
+        <span className="chip chip-sm bg-white font-mono">
+          <i
+            aria-hidden="true"
+            className="block h-2 w-2 rounded-full bg-grass"
+          />
+          {site.availability}
         </span>
-        <div className="h-10 w-px overflow-hidden bg-white/10">
-          <div className="scroll-hint-dot h-3 w-px bg-accent2" />
-        </div>
-      </div>
+        <Sticker tone="paper" small rotate={2}>
+          {site.location}
+        </Sticker>
+      </Reveal>
+
+      {/* The statement */}
+      <Reveal
+        delay={300}
+        as="div"
+        className="relative mx-auto mt-14 max-w-3xl text-center"
+      >
+        <p className="font-display text-[clamp(1.35rem,4.6vw,2.6rem)] leading-[1.25]">
+          {site.statement[0]}{" "}
+          <Star
+            aria-hidden="true"
+            className="inline-block h-[0.7em] w-[0.7em] text-grass"
+          />
+          <br />
+          <span className="marker" style={{ ["--hl" as string]: "var(--color-marker)" }}>
+            {site.statement[1]}
+          </span>
+        </p>
+
+        <ArrowCurve
+          aria-hidden="true"
+          className="absolute -right-2 -bottom-12 hidden h-14 w-28 text-ink-soft/40 sm:block"
+        />
+      </Reveal>
+
+      {/* CTA */}
+      <Reveal delay={360} className="mt-12 flex justify-center">
+        <a
+          href={`mailto:${site.email}`}
+          className="relative inline-flex items-center gap-2.5 border-2 border-ink bg-ink px-6 py-3 font-mono text-sm font-bold text-paper shadow-[4px_4px_0_var(--color-marker)] transition-transform hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--color-marker)]"
+        >
+          <Tape className="-top-2.5 left-4" rotate={-10} width={46} height={18} />
+          CONTACT ME
+        </a>
+      </Reveal>
     </section>
   );
 }
