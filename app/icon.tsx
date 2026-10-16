@@ -3,7 +3,7 @@ import { ImageResponse } from "next/og";
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
 
-/** Favicon: the initials, boxed, in the site's marker yellow. */
+/** Favicon: the initials on ink, with the system's red registration mark. */
 export default function Icon() {
   return new ImageResponse(
     (
@@ -14,15 +14,25 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#ffd23f",
-          color: "#16150f",
-          fontSize: 30,
-          fontWeight: 900,
+          position: "relative",
+          background: "#0e0e0e",
+          color: "#ffffff",
+          fontSize: 25,
+          fontWeight: 600,
           letterSpacing: -1,
-          border: "4px solid #16150f",
         }}
       >
         FM
+        <div
+          style={{
+            position: "absolute",
+            right: 9,
+            top: 11,
+            width: 7,
+            height: 7,
+            background: "#e8352b",
+          }}
+        />
       </div>
     ),
     size

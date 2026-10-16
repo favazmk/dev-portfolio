@@ -1,105 +1,93 @@
 import { site } from "@/config/site";
 import Reveal from "@/components/Reveal";
-import Tape from "@/components/ui/Tape";
-import Polaroid from "@/components/ui/Polaroid";
 
-const SOCIAL_LABELS: Record<string, string> = {
-  github: "GITHUB",
-  linkedin: "LINKEDIN",
-  x: "X",
-  instagram: "INSTAGRAM",
-};
+const CHANNELS = [
+  { label: "Email", value: site.email, href: `mailto:${site.email}` },
+  {
+    label: "Phone",
+    value: site.phone,
+    href: `tel:${site.phone.replace(/\s/g, "")}`,
+  },
+  { label: "Instagram", value: "@fa_was.mk", href: site.socials.instagram },
+  { label: "GitHub", value: `@${site.github}`, href: site.socials.github },
+];
 
+/**
+ * Close. The email set as the largest type on the page after the hero, because
+ * it is the one thing the page is asking anyone to do.
+ */
 export default function Contact() {
-  const socials = Object.entries(site.socials).filter(([, url]) => url);
-
   return (
-    <section
-      id="contact"
-      aria-labelledby="contact-heading"
-      className="relative border-t-2 border-dashed border-rule px-5 py-14 sm:px-10 sm:py-20"
-    >
-      <Reveal className="mx-auto w-fit">
-        <p className="text-center font-hand text-xl text-ink-soft">say hi</p>
-      </Reveal>
-
-      <div className="mx-auto mt-6 grid max-w-5xl items-center gap-12 lg:grid-cols-[1fr_auto_1fr]">
-        <Reveal delay={60} className="hidden justify-self-end lg:block">
-          <Polaroid
-            src="/work/pandur.webp"
-            alt="Pandur brand site"
-            caption="recent work"
-            rotate={-6}
-            width={175}
-          />
+    <section id="contact" className="on-dark scroll-mt-14">
+      <div className="shell py-20 sm:py-28">
+        <Reveal>
+          <div className="rule-signal flex items-baseline justify-between gap-6 pt-5">
+            <p className="label text-muted-auto">
+              <span className="numeral">07</span>
+              <span className="mx-2 opacity-40">/</span>
+              Contact
+            </p>
+            <p className="label text-signal">{site.availability}</p>
+          </div>
         </Reveal>
 
-        <Reveal delay={120} className="justify-self-center text-center">
-          <h2
-            id="contact-heading"
-            className="border-[3px] border-ink bg-white px-7 py-3 font-display text-[clamp(1.8rem,7vw,3.25rem)] leading-none"
-          >
+        <Reveal delay={80}>
+          <h2 className="display mt-10 text-[clamp(2.4rem,8vw,6rem)]">
             {site.contact.heading}
           </h2>
+        </Reveal>
 
-          {/* Sticky note */}
-          <div
-            className="relative mx-auto mt-10 max-w-sm bg-marker p-6 shadow-[5px_5px_0_rgba(0,0,0,0.18)]"
-            style={{ transform: "rotate(-1.5deg)" }}
-          >
-            <Tape
-              className="-top-3 left-1/2 -translate-x-1/2"
-              rotate={-5}
-              width={84}
-            />
-            <p className="font-hand text-xl leading-snug">
-              {site.contact.note}
-            </p>
-          </div>
-
+        <Reveal delay={140}>
           <a
             href={`mailto:${site.email}`}
-            className="mt-10 inline-flex items-center gap-2.5 border-2 border-ink bg-ink px-6 py-3 font-mono text-sm font-bold text-paper shadow-[4px_4px_0_var(--color-marker)] transition-transform hover:-translate-y-0.5 hover:shadow-[6px_6px_0_var(--color-marker)]"
+            className="link-ul mt-10 inline-block text-[clamp(1.1rem,4vw,2.2rem)] break-all"
           >
             {site.email}
           </a>
-
-          {socials.length ? (
-            <ul className="mt-8 flex flex-wrap justify-center gap-2">
-              {socials.map(([key, url]) => (
-                <li key={key}>
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noreferrer noopener"
-                    className="chip chip-sm bg-white font-mono transition-transform hover:-translate-y-0.5 hover:bg-sky hover:text-white"
-                  >
-                    {SOCIAL_LABELS[key] ?? key.toUpperCase()}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : null}
         </Reveal>
 
-        <Reveal delay={180} className="hidden justify-self-start lg:block">
-          <Polaroid
-            src="/work/docmate.webp"
-            alt="DocMate booking platform"
-            caption="docmate.ae"
-            rotate={5}
-            width={175}
-            tapeRotate={6}
-          />
+        <Reveal delay={200}>
+          <p className="text-muted-auto mt-8 max-w-lg leading-relaxed">
+            {site.contact.note}
+          </p>
+        </Reveal>
+
+        <Reveal delay={260}>
+          <dl className="mt-16 grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-4">
+            {CHANNELS.map((c) => (
+              <div key={c.label} className="rule pt-4">
+                <dt className="label text-muted-auto">{c.label}</dt>
+                <dd className="mt-3">
+                  <a
+                    href={c.href}
+                    target={c.href.startsWith("http") ? "_blank" : undefined}
+                    rel={
+                      c.href.startsWith("http")
+                        ? "noreferrer noopener"
+                        : undefined
+                    }
+                    className="link-ul text-sm break-all"
+                  >
+                    {c.value}
+                  </a>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </Reveal>
+
+        {/* Colophon */}
+        <Reveal delay={320}>
+          <div className="rule mt-20 flex flex-wrap items-baseline justify-between gap-4 pt-6">
+            <p className="label text-muted-auto">
+              {site.fullName} · {site.location}
+            </p>
+            <p className="label numeral text-muted-auto">
+              ©{site.year} · Built with Next.js
+            </p>
+          </div>
         </Reveal>
       </div>
-
-      <footer className="mx-auto mt-24 flex max-w-5xl flex-wrap items-center justify-between gap-3 border-t-2 border-dashed border-rule pt-6 font-mono text-[11px] uppercase tracking-wide text-ink-soft">
-        <span>
-          © {new Date().getFullYear()} {site.name}
-        </span>
-        <span>{site.location}</span>
-      </footer>
     </section>
   );
 }
