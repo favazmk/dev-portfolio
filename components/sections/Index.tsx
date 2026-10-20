@@ -35,7 +35,7 @@ export default function Index() {
               <span className="label numeral text-signal w-8 shrink-0">
                 {item.n}
               </span>
-              <span className="display text-[clamp(1.35rem,4.2vw,2.5rem)]">
+              <span className="row-shift display text-[clamp(1.35rem,4.2vw,2.5rem)]">
                 {item.label}
               </span>
               <span className="label numeral text-muted-auto ml-auto shrink-0">

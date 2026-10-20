@@ -1,15 +1,19 @@
 import Image from "next/image";
 import { site } from "@/config/site";
 import Reveal from "@/components/Reveal";
+import HeroField from "@/components/HeroField";
+import HeroTitle from "@/components/HeroTitle";
 
 /**
  * The cover. Ink field, the statement set as large as it will go, and the
  * practical facts — who, where, available — pinned along the bottom rule.
+ * Behind it, a WebGL point field that ripples and warms under the pointer.
  */
 export default function Hero() {
   return (
     <section className="on-dark relative overflow-hidden">
-      <div className="shell flex min-h-[86vh] flex-col justify-between pt-16 pb-10 sm:pt-20 lg:min-h-[90vh]">
+      <HeroField />
+      <div className="shell relative flex min-h-[86vh] flex-col justify-between pt-16 pb-10 sm:pt-20 lg:min-h-[90vh]">
         {/* Top line: role, year */}
         <Reveal>
           <div className="rule-signal flex items-start justify-between gap-6 pt-5">
@@ -29,13 +33,7 @@ export default function Hero() {
             <p className="label text-signal mb-8">{site.availability}</p>
           </Reveal>
 
-          <h1 className="display text-[clamp(3.3rem,15vw,11rem)]">
-            {site.statement.map((line, i) => (
-              <Reveal key={line} as="span" delay={140 + i * 110} className="block">
-                {line}
-              </Reveal>
-            ))}
-          </h1>
+          <HeroTitle lines={site.statement} />
 
           <Reveal delay={400}>
             <p className="mt-10 max-w-xl text-base leading-relaxed text-white/70 sm:text-lg">
@@ -60,12 +58,11 @@ export default function Hero() {
               <p className="label">{site.fullName}</p>
               <p className="label text-muted-auto mt-1.5">{site.location}</p>
             </div>
-            <a
-              href="#index"
-              className="label link-ul text-muted-auto ml-auto hidden sm:inline-block"
-            >
-              Contents ↓
-            </a>
+            <span className="ml-auto hidden sm:inline-block" data-magnetic="0.5">
+              <a href="#index" className="label link-ul text-muted-auto inline-flex items-center gap-2">
+                Contents <span className="scroll-cue" aria-hidden="true">↓</span>
+              </a>
+            </span>
           </div>
         </Reveal>
       </div>

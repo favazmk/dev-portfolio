@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import { site } from "@/config/site";
 import SmoothScroll from "@/components/SmoothScroll";
+import MotionLayer from "@/components/MotionLayer";
+import Cursor from "@/components/Cursor";
 import "./globals.css";
 
 /* Display — headlines and the big statement type */
@@ -69,6 +71,14 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+/**
+ * Runs before first paint. Opts the page into motion (so CSS can hold
+ * elements in their pre-animation state without a flash), unless the visitor
+ * prefers reduced motion. If the motion layer hasn't started within four
+ * seconds — script blocked, chunk failed — it hands the static page back.
+ */
+const motionBoot = `(function(){var d=document.documentElement;if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;d.classList.add("motion");setTimeout(function(){if(!d.hasAttribute("data-motion-ready"))d.classList.remove("motion")},4000)})();`;
+
 const personJsonLd = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -90,7 +100,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${display.variable} ${mono.variable} ${body.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: motionBoot }} />
+      </head>
       <body>
         <a
           href="#content"
@@ -99,6 +113,8 @@ export default function RootLayout({
           Skip to content
         </a>
         <SmoothScroll />
+        <MotionLayer />
+        <Cursor />
         {children}
         <script
           type="application/ld+json"

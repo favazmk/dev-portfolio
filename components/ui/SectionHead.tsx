@@ -34,7 +34,7 @@ export default function SectionHead({
           ) : null}
         </div>
 
-        <h2 className="display mt-7 text-[clamp(2.1rem,6.5vw,4.5rem)]">
+        <h2 data-split="chars" className="display mt-7 text-[clamp(2.1rem,6.5vw,4.5rem)]">
           {title}
         </h2>
 

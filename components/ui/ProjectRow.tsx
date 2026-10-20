@@ -25,6 +25,7 @@ export default function ProjectRow({
       href={`/work/${project.slug}`}
       className="work-row rule group grid gap-6 py-8 sm:py-10 lg:grid-cols-12 lg:gap-8"
       aria-label={`${project.title} — case study`}
+      data-cursor="View"
     >
       {/* Number */}
       <div className="flex items-start justify-between gap-4 lg:col-span-1 lg:block">
@@ -42,7 +43,7 @@ export default function ProjectRow({
           </span>
         ) : null}
 
-        <h3 className="display text-[clamp(1.6rem,4.4vw,2.6rem)]">
+        <h3 className="row-shift display text-[clamp(1.6rem,4.4vw,2.6rem)]">
           {project.title}
         </h3>
         <p className="label text-muted-auto mt-3">{project.client}</p>
@@ -63,18 +64,23 @@ export default function ProjectRow({
       {/* Visual */}
       <div className="lg:col-span-4">
         <div
-          className={`relative aspect-[16/10] w-full overflow-hidden ${
+          data-clip=""
+          data-parallax={project.image ? "8" : undefined}
+          className={`row-media relative aspect-[16/10] w-full overflow-hidden ${
             onDark ? "bg-ink-2" : "bg-mist"
           }`}
         >
           {project.image ? (
-            <Image
-              src={project.image}
-              alt=""
-              fill
-              sizes="(max-width: 1024px) 100vw, 40vw"
-              className="object-cover"
-            />
+            /* Wrapper takes the scroll parallax; the image keeps the hover zoom */
+            <div className="absolute inset-0">
+              <Image
+                src={project.image}
+                alt=""
+                fill
+                sizes="(max-width: 1024px) 100vw, 40vw"
+                className="object-cover"
+              />
+            </div>
           ) : (
             /* No screenshot — the tags carry the panel instead of a grey box */
             <div className="flex h-full flex-col justify-between p-6">

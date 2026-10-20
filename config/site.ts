@@ -75,6 +75,12 @@ export const site = {
     x: "",
   },
 
+  /** The two oversized scrolling bands — one after the contents, one before contact */
+  kinetic: {
+    opening: ["Build", "Write", "Ship", "Repeat"],
+    closing: ["Systems that ship", "Words that sell"],
+  },
+
   /** Numbered contents list, mirroring the section ids on the page */
   index: [
     { n: "01", label: "Profile", href: "#profile" },
