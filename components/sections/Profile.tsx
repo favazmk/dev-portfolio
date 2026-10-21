@@ -23,7 +23,7 @@ export default function Profile() {
             {site.stats.map((s) => (
               <div key={s.label} className="rule pt-4">
                 <dt className="label text-muted-auto">{s.label}</dt>
-                <dd className="display mt-3 text-[clamp(1.9rem,5vw,2.9rem)]">
+                <dd data-count="" className="display mt-3 text-[clamp(1.9rem,5vw,2.9rem)]">
                   {s.value}
                 </dd>
               </div>
@@ -38,7 +38,7 @@ export default function Profile() {
           <Reveal key={d.n} delay={i * 90}>
             <div className="rule pt-5">
               <p className="label numeral text-signal">{d.n}</p>
-              <h3 className="display mt-5 text-[clamp(1.5rem,3.6vw,2.1rem)]">
+              <h3 data-split="words" className="display mt-5 text-[clamp(1.5rem,3.6vw,2.1rem)]">
                 {d.title}
               </h3>
               <p className="text-muted-auto mt-4 leading-relaxed">{d.note}</p>

@@ -39,6 +39,11 @@ html {
   html { scroll-behavior: auto; }
 }
 
+/* Lenis owns the scroll once it boots */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
 body {
   background: var(--color-paper);
   color: var(--color-ink);
@@ -117,19 +122,31 @@ body {
    A hairline with a short red cap at its head — the one piece of
    ornament the system allows, used to open a section.
    ============================================================ */
-.rule {
-  border-top: 1px solid var(--color-line);
+/* Hairlines are painted rather than bordered so they can draw in from the
+   left: --draw runs 0 → 1 (MotionLayer) and defaults to fully drawn. */
+@property --draw {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
 }
-.on-dark .rule {
-  border-top-color: var(--color-line-dark);
+
+.rule,
+.rule-signal {
+  --rule-color: var(--color-line);
+  border-top: 1px solid transparent;
+  background-image: linear-gradient(var(--rule-color), var(--rule-color));
+  background-origin: border-box;
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  background-size: calc(var(--draw) * 100%) 1px;
+}
+.on-dark .rule,
+.on-dark .rule-signal {
+  --rule-color: var(--color-line-dark);
 }
 
 .rule-signal {
   position: relative;
-  border-top: 1px solid var(--color-line);
-}
-.on-dark .rule-signal {
-  border-top-color: var(--color-line-dark);
 }
 .rule-signal::before {
   content: "";
@@ -139,6 +156,8 @@ body {
   width: 56px;
   height: 3px;
   background: var(--color-signal);
+  transform: scaleX(var(--draw));
+  transform-origin: left;
 }
 
 /* The lone red dot used as a registration mark */
@@ -187,9 +206,12 @@ body {
   transition: opacity 220ms ease;
 }
 .logo-cell:hover { opacity: 1; }
+.logo-cell > * { transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1); }
+.logo-cell:hover > * { transform: scale(1.07); }
 
 @media (prefers-reduced-motion: reduce) {
-  .logo-cell { transition: none; }
+  .logo-cell, .logo-cell > * { transition: none; }
+  .logo-cell:hover > * { transform: none; }
 }
 
 @media (min-width: 768px) {
@@ -205,17 +227,27 @@ body {
   position: relative;
   transition: background-color 200ms ease;
 }
-.work-row:hover { background: var(--color-mist); }
-.on-dark .work-row:hover { background: var(--color-ink-2); }
+/* background-color only: the hairline is a background-image */
+.work-row:hover { background-color: var(--color-mist); }
+.on-dark .work-row:hover { background-color: var(--color-ink-2); }
 
-.work-row .arrow {
-  transition: transform 220ms ease;
+.work-row .arrow,
+.work-row .row-shift,
+.work-row .row-media img {
+  transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .work-row:hover .arrow { transform: translateX(5px); }
+.work-row:hover .row-shift { transform: translateX(14px); }
+.work-row:hover .row-media img { transform: scale(1.05); }
 
 @media (prefers-reduced-motion: reduce) {
-  .work-row, .work-row .arrow { transition: none; }
-  .work-row:hover .arrow { transform: none; }
+  .work-row,
+  .work-row .arrow,
+  .work-row .row-shift,
+  .work-row .row-media img { transition: none; }
+  .work-row:hover .arrow,
+  .work-row:hover .row-shift,
+  .work-row:hover .row-media img { transform: none; }
 }
 
 /* ============================================================
@@ -286,4 +318,126 @@ body {
     transform: none;
     transition: none;
   }
+}
+
+/* ============================================================
+   MOTION
+   Everything below only applies once the boot script in the
+   layout has added `motion` to <html> — which it never does for
+   reduced-motion users, and which it takes back if the motion
+   layer hasn't started within a few seconds.
+   ============================================================ */
+
+/* Starting states, held until GSAP takes over */
+.motion .rule,
+.motion .rule-signal { --draw: 0; }
+.motion [data-split]:not([data-split-ready]),
+.motion [data-assemble]:not([data-split-ready]),
+.motion [data-hero-title]:not([data-split-ready]) { visibility: hidden; }
+.motion:not([data-motion-ready]) [data-clip] { clip-path: inset(100% 0 0 0); }
+
+/* SplitText line masks: room for descenders under the tight leading */
+.kt-line-mask {
+  padding-block: 0.06em 0.14em;
+  margin-block: -0.06em -0.14em;
+}
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.hero-line {
+  display: block;
+  white-space: nowrap;
+  overflow: clip;
+  padding-block: 0.04em 0.12em;
+  margin-block: -0.04em -0.12em;
+}
+
+.hero-field {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 4%, #000 45%);
+  mask-image: linear-gradient(to bottom, transparent 4%, #000 45%);
+}
+.hero-field canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Scroll progress ──────────────────────────────────────── */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--color-signal);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+:root:not(.motion) .scroll-progress { display: none; }
+
+/* ── Cursor ───────────────────────────────────────────────── */
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  display: none;
+  width: 84px;
+  height: 84px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-signal);
+  color: #fff;
+  pointer-events: none;
+  will-change: transform;
+}
+.cursor .label {
+  font-size: 0.625rem;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.cursor.is-label .label { opacity: 1; }
+
+/* ── Marquee ──────────────────────────────────────────────── */
+.marquee-word {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(3rem, 11vw, 9rem);
+  letter-spacing: -0.04em;
+  line-height: 1;
+  white-space: nowrap;
+  padding-inline: 0.35em;
+}
+.marquee-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px currentColor;
+}
+.marquee .marquee-outline { -webkit-text-stroke-color: var(--color-ink); }
+.marquee.on-dark .marquee-outline { -webkit-text-stroke-color: var(--color-paper); }
+.marquee-star {
+  color: var(--color-signal);
+  font-size: clamp(1.4rem, 4vw, 3rem);
+}
+
+/* ── Magnetic targets (display comes from utilities) ─────── */
+[data-magnetic] { will-change: transform; }
+
+/* ── Small loops ──────────────────────────────────────────── */
+@keyframes cue {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+.motion .scroll-cue {
+  display: inline-block;
+  animation: cue 1.8s ease-in-out infinite;
+}
+
+.arrow-nudge { transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1); }
+.group:hover .arrow-nudge { transform: translateX(10px); }
+@media (prefers-reduced-motion: reduce) {
+  .arrow-nudge { transition: none; }
+  .group:hover .arrow-nudge { transform: none; }
 }

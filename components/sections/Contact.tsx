@@ -32,18 +32,21 @@ export default function Contact() {
         </Reveal>
 
         <Reveal delay={80}>
-          <h2 className="display mt-10 text-[clamp(2.4rem,8vw,6rem)]">
+          <h2 data-assemble="" className="display mt-10 text-[clamp(2.4rem,8vw,6rem)]">
             {site.contact.heading}
           </h2>
         </Reveal>
 
         <Reveal delay={140}>
-          <a
-            href={`mailto:${site.email}`}
-            className="link-ul mt-10 inline-block text-[clamp(1.1rem,4vw,2.2rem)] break-all"
-          >
-            {site.email}
-          </a>
+          <span className="mt-10 inline-block" data-magnetic="0.25">
+            <a
+              href={`mailto:${site.email}`}
+              className="link-ul inline-block text-[clamp(1.1rem,4vw,2.2rem)] break-all transition-colors hover:text-signal"
+              data-cursor="Mail"
+            >
+              {site.email}
+            </a>
+          </span>
         </Reveal>
 
         <Reveal delay={200}>

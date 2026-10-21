@@ -22,7 +22,7 @@ export default function Content() {
 
         <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-7">
-            <p className="display text-[clamp(1.3rem,3vw,1.9rem)] leading-[1.25]">
+            <p data-scrub-words="" className="display text-[clamp(1.3rem,3vw,1.9rem)] leading-[1.25]">
               {site.content.standfirst}
             </p>
             <div className="mt-8 space-y-5">
@@ -67,7 +67,7 @@ export default function Content() {
         <Reveal delay={140}>
           <div className="rule mt-16 pt-6 sm:mt-20">
             <p className="label text-muted-auto">Brands I&rsquo;ve written copy for</p>
-            <p className="mt-5 text-lg leading-[1.6] text-white/55 sm:text-xl">
+            <p data-scrub-words="" className="mt-5 text-lg leading-[1.6] text-white/70 sm:text-xl">
               {brandClients.map((c) => c.name).join(" · ")}
             </p>
           </div>

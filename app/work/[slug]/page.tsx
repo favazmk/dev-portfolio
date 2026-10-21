@@ -86,7 +86,11 @@ export default async function CaseStudy({
               </span>
             ) : null}
 
-            <h1 className="display mt-7 text-[clamp(2.8rem,11vw,8rem)]">
+            <h1
+              data-split="chars"
+              data-split-load=""
+              className="display mt-7 text-[clamp(2.8rem,11vw,8rem)]"
+            >
               {project.title}
             </h1>
             <p className="label text-muted-auto mt-6">{project.client}</p>
@@ -135,15 +139,18 @@ export default async function CaseStudy({
 
         {/* ── COVER IMAGE ──────────────────────────────────────── */}
         {project.image ? (
-          <div className="relative aspect-[16/8] w-full bg-mist">
-            <Image
-              src={project.image}
-              alt={`${project.title} — ${project.summary}`}
-              fill
-              sizes="100vw"
-              priority
-              className="object-cover"
-            />
+          <div className="relative aspect-[16/8] w-full overflow-hidden bg-mist">
+            {/* Settles from a slight zoom as it scrolls through (data-zoom) */}
+            <div data-zoom="" className="absolute inset-0">
+              <Image
+                src={project.image}
+                alt={`${project.title} — ${project.summary}`}
+                fill
+                sizes="100vw"
+                priority
+                className="object-cover"
+              />
+            </div>
           </div>
         ) : null}
 
@@ -160,7 +167,10 @@ export default async function CaseStudy({
                 </p>
 
                 <div className="lg:col-span-7">
-                  <h2 className="display text-[clamp(1.45rem,4vw,2.4rem)] leading-[1.12]">
+                  <h2
+                    data-split="words"
+                    className="display text-[clamp(1.45rem,4vw,2.4rem)] leading-[1.12]"
+                  >
                     {section.heading}
                   </h2>
                   <div className="prose-col mt-7">
@@ -214,10 +224,17 @@ export default async function CaseStudy({
             </Link>
 
             {next ? (
-              <Link href={`/work/${next.slug}`} className="group text-right">
+              <Link
+                href={`/work/${next.slug}`}
+                className="group text-right"
+                data-cursor="Next"
+              >
                 <span className="label text-muted-auto">Next project</span>
                 <span className="display mt-3 block text-[clamp(1.5rem,5vw,3rem)] transition-colors group-hover:text-signal">
-                  {next.title} →
+                  {next.title}{" "}
+                  <span className="arrow-nudge inline-block" aria-hidden="true">
+                    →
+                  </span>
                 </span>
               </Link>
             ) : null}
