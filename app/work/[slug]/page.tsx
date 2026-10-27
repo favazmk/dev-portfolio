@@ -10,6 +10,7 @@ import {
 } from "@/config/site";
 import Nav from "@/components/Nav";
 import Reveal from "@/components/Reveal";
+import WorkField from "@/components/WorkField";
 import LogoMark from "@/components/ui/LogoMark";
 
 export function generateStaticParams() {
@@ -67,8 +68,9 @@ export default async function CaseStudy({
 
       <main id="content">
         {/* ── COVER ────────────────────────────────────────────── */}
-        <header className="on-dark">
-          <div className="shell pt-16 pb-14 sm:pt-20 sm:pb-16">
+        <header className="on-dark relative overflow-hidden">
+          <WorkField />
+          <div className="shell relative pt-16 pb-14 sm:pt-20 sm:pb-16">
             <div className="rule-signal pt-5">
               <div className="flex items-baseline justify-between gap-6">
                 <p className="label text-muted-auto">
@@ -139,7 +141,7 @@ export default async function CaseStudy({
 
         {/* ── COVER IMAGE ──────────────────────────────────────── */}
         {project.image ? (
-          <div className="relative aspect-[16/8] w-full overflow-hidden bg-mist">
+          <div data-tilt="4" className="relative aspect-[16/8] w-full overflow-hidden bg-mist">
             {/* Settles from a slight zoom as it scrolls through (data-zoom) */}
             <div data-zoom="" className="absolute inset-0">
               <Image

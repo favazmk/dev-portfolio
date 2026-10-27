@@ -66,6 +66,7 @@ export default function ProjectRow({
         <div
           data-clip=""
           data-parallax={project.image ? "8" : undefined}
+          data-tilt="6"
           className={`row-media relative aspect-[16/10] w-full overflow-hidden ${
             onDark ? "bg-ink-2" : "bg-mist"
           }`}

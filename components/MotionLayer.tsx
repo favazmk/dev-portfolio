@@ -16,6 +16,7 @@ import { usePathname } from "next/navigation";
  *   data-zoom                   cover image settles from 1.18× as you scroll
  *   data-drift="-1|1"           line slides sideways as the hero leaves
  *   data-magnetic               element leans toward the pointer
+ *   data-tilt="7"               panel rotates in 3D toward the pointer
  *   data-scramble               label text decodes itself on hover
  *   data-progress               scaleX bound to page progress
  *   .rule / .rule-signal        hairlines draw from the left
@@ -266,6 +267,25 @@ export default function MotionLayer() {
               on(el, "pointerleave", () => {
                 toX(0);
                 toY(0);
+              });
+            });
+
+            /* ── 3D tilt toward the pointer ──────────────────── */
+            all("[data-tilt]").forEach((el) => {
+              const max = Number(el.dataset.tilt || 7);
+              gsap.set(el, { transformPerspective: 900, transformOrigin: "center" });
+              const rx = gsap.quickTo(el, "rotationX", { duration: 0.5, ease: "power3.out" });
+              const ry = gsap.quickTo(el, "rotationY", { duration: 0.5, ease: "power3.out" });
+              on(el, "pointermove", (e) => {
+                const r = el.getBoundingClientRect();
+                const px = (e.clientX - (r.left + r.width / 2)) / (r.width / 2);
+                const py = (e.clientY - (r.top + r.height / 2)) / (r.height / 2);
+                rx(gsap.utils.clamp(-max, max, -py * max));
+                ry(gsap.utils.clamp(-max, max, px * max));
+              });
+              on(el, "pointerleave", () => {
+                rx(0);
+                ry(0);
               });
             });
 
